@@ -14,8 +14,10 @@ export default {
   },
   effects: {
     *fetch({ payload: { page = 1, limit } }, { call, put }) {
-      const { data, total } = yield call(usersService.fetch, { page, limit });
-      yield put({ type: 'save', payload: { data, total, page: parseInt(page, 10) } });
+      const { data } = yield call(usersService.fetch, { page, limit });
+      const {list,pagination} = data;
+      // console.log('data',data);
+      yield put({ type: 'save', payload: { data: list, total: pagination.total, page: parseInt(pagination.current, 10) } });
     },
 
     *remove({ payload: { id } }, { call, put, select }) {
@@ -24,20 +26,22 @@ export default {
         const page = yield select(state => state.users.page);
         yield put({ type: 'fetch', payload: { page } })
       } else {
-        console.log('id is null')
+        // console.log('id is null')
       }
     },
 
-    *patch({payload:{id,values}},{call,put,select}){
-      yield call(usersService.patch,id,values);
-      const page = yield select(state=>state.users.page);
-      yield put({type:'fetch',payload:{page}});
+    *patch({ payload: { id,values } }, { call, put, select }) {
+      // console.log('valuse',id);
+      yield call(usersService.patch, id, values);
+      const page = yield select(state => state.users.page);
+      yield put({ type: 'fetch', payload: { page } });
     },
 
-    *create({payload:{values}},{call,put,select}){
-      yield call(usersService.create,values);
-      const page = yield select(state=>state.user.page);
-      yield yield put({type:'fetch',payload:{page}});
+    *create({ payload: { values } }, { call, put, select }) {
+      // console.log('*create values',values);
+      yield call(usersService.create, values);
+      const page = yield select(state => state.user.page);
+      yield yield put({ type: 'fetch', payload: { page } });
     }
   },
   subscriptions: {

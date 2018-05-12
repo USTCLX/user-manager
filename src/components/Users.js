@@ -2,16 +2,23 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-12 09:21:47
+ * @Last Modified time: 2018-05-12 14:42:56
  */
 
 import { connect } from 'dva';
 import { Table, Pagination, Popconfirm, Button } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
-import { PAGE_SIZE } from '../constants';
+import { PAGE_SIZE ,levelMap} from '../constants';
 
 function Users({ list: dataSource, total, page: current, loading, dispatch }) {
+  
+  dataSource.forEach((data)=>{
+    data.levelName = levelMap[data.level].name;
+  })
+
+  // console.log('dataStource',dataSource);
+
   function deleteHandler(id) {
     dispatch({
       type: 'users/remove',
@@ -47,26 +54,26 @@ function Users({ list: dataSource, total, page: current, loading, dispatch }) {
   const columns = [
     {
       title: '用户名',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a href="">{text}</a>,
+      dataIndex: 'username',
+      key: 'username',
+      render: text => <a>{text}</a>,
     }, {
-      titile: '邮箱',
-      dataIndex: 'email',
-      key: 'email'
+      title: '职位',
+      dataIndex: 'levelName',
+      key: 'levelName'
     }, {
-      title: '网站',
-      dataIndex: '网站',
-      key: 'website'
+      title: '电话号码',
+      dataIndex: 'phone',
+      key: 'phone'
     }, {
       title: '操作',
       key: 'operation',
       render: (text, record) => (
         <span className={style.operation}>
-          <UserModal record={record} onOk={editHandler.bind(null, record.id)}>
+          <UserModal record={record} onOk={editHandler.bind(null, record._id)}>
             <a>编辑</a>
           </UserModal>
-          <Popconfirm title="确定删除？" onConfirm={deleteHandler.bind(null, record.id)}>
+          <Popconfirm title="确定删除？" onConfirm={deleteHandler.bind(null, record._id)}>
             <a href="">删除</a>
           </Popconfirm>
         </span>
@@ -85,13 +92,13 @@ function Users({ list: dataSource, total, page: current, loading, dispatch }) {
         <Table
           columns={columns}
           dataSource={dataSource}
-          rowKey={record => record.id}
+          rowKey={record => record._id}
           pagination={false}
           loading={loading}
         />
         <Pagination
           className="ant-table-pagination"
-          total={50}
+          total={total}
           current={current}
           pageSize={PAGE_SIZE}
           onChange={pageChangeHandler}
