@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { Modal, Form, Input, Select } from 'antd';
-import {levelMap} from '../constants';
+import {levelMap} from '../../constants';
 
 const FormItem = Form.Item;
 
@@ -32,7 +32,7 @@ class UserEditModal extends Component {
     const { onOk } = this.props;
     this.props.form.validateFields((err, values) => {
       if (err) {
-        console.log('err', err);
+        // console.log('err', err);
       } else {
         onOk(values);
         this.hideModalHandler();

@@ -1,7 +1,7 @@
-import * as usersService from '../services/users';
+import * as unitsService from '../services/units';
 
 export default {
-  namespace: 'users',
+  namespace: 'units',
   state: {
     list: [],
     total: null,
@@ -14,7 +14,7 @@ export default {
   },
   effects: {
     *fetch({ payload: { page = 1, limit } }, { call, put }) {
-      const { data } = yield call(usersService.fetch, { page, limit });
+      const { data } = yield call(unitsService.fetch, { page, limit });
       const {list,pagination} = data;
       // console.log('data',data);
       yield put({ type: 'save', payload: { data: list, total: pagination.total, page: parseInt(pagination.current, 10) } });
@@ -22,7 +22,7 @@ export default {
 
     *remove({ payload: { id } }, { call, put, select }) {
       if (!!id) {
-        yield call(usersService.remove, id);
+        yield call(unitsService.remove, id);
         const page = yield select(state => state.users.page);
         yield put({ type: 'fetch', payload: { page } })
       } else {
@@ -32,14 +32,14 @@ export default {
 
     *patch({ payload: { id,values } }, { call, put, select }) {
       // console.log('valuse',id);
-      yield call(usersService.patch, id, values);
+      yield call(unitsService.patch, id, values);
       const page = yield select(state => state.users.page);
       yield put({ type: 'fetch', payload: { page } });
     },
 
     *create({ payload: { values } }, { call, put, select }) {
       // console.log('*create values',values);
-      yield call(usersService.create, values);
+      yield call(unitsService.create, values);
       const page = yield select(state => state.users.page);
       yield yield put({ type: 'fetch', payload: { page } });
     }
@@ -47,7 +47,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/users') {
+        if (pathname === '/units') {
           dispatch({ type: 'fetch', payload: query || {} });
         }
       });

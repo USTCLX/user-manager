@@ -2,17 +2,17 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-12 14:42:56
+ * @Last Modified time: 2018-05-13 21:43:41
  */
 
 import { connect } from 'dva';
-import { Table, Pagination, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
-import { PAGE_SIZE ,levelMap} from '../constants';
+import {levelMap} from '../../constants';
 
-function Users({ list: dataSource, total, page: current, loading, dispatch }) {
-  
+function Users({ list: dataSource, total, page: current, loading, dispatch ,units}) {
+
   dataSource.forEach((data)=>{
     data.levelName = levelMap[data.level].name;
   })
@@ -28,14 +28,14 @@ function Users({ list: dataSource, total, page: current, loading, dispatch }) {
     })
   }
 
-  function pageChangeHandler(page) {
-    dispatch({
-      type: 'users/fetch',
-      payload: {
-        page
-      }
-    })
-  }
+  // function pageChangeHandler(page) {
+  //   dispatch({
+  //     type: 'users/fetch',
+  //     payload: {
+  //       page
+  //     }
+  //   })
+  // }
 
   function editHandler(id, values) {
     dispatch({
@@ -96,24 +96,25 @@ function Users({ list: dataSource, total, page: current, loading, dispatch }) {
           pagination={false}
           loading={loading}
         />
-        <Pagination
+        {/* <Pagination
           className="ant-table-pagination"
           total={total}
           current={current}
           pageSize={PAGE_SIZE}
           onChange={pageChangeHandler}
-        />
+        /> */}
       </div>
     </div>
   )
 }
 
 function mapStateToProps(state) {
-  const { list, total, page } = state.users;
+  const { list, total, page,units } = state.users;
   return {
     list,
     total,
     page,
+    units,
     loading: state.loading.models.users
   }
 }
