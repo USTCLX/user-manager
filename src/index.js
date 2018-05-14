@@ -12,6 +12,7 @@ app.use(createLoading());
 app.model(require('./models/users').default);
 app.model(require('./models/units').default);
 app.model(require('./models/departments').default);
+app.model(require('./models/groups.js').default);
 
 // 4. Router
 app.router(require('./router').default);

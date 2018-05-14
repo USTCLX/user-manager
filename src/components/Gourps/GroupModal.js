@@ -41,9 +41,9 @@ class GroupEditModal extends Component {
   }
 
   render() {
-    const { children, unitsList } = this.props;
+    const { children, unitsList, departmentsList } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name,unit = {}} = this.props.record;
+    const { name, department = {} } = this.props.record;
 
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -71,12 +71,22 @@ class GroupEditModal extends Component {
               }
             </FormItem>
 
-            <FormItem {...formItemLayout} label="从属中心">
+            {/* <FormItem {...formItemLayout} label="从属中心">
               {
                 getFieldDecorator('unit',
                   { initialValue: unit._id, rules: [{ required: 'true', message: '请选择从属中心' }] })(
                     <Select>{unitsList.map((unit) => {
                       return (<Option key={unit._id} value={unit._id}>{unit.name}</Option>)
+                    })}</Select>)
+              }
+            </FormItem> */}
+
+            <FormItem {...formItemLayout} label="从属部门">
+              {
+                getFieldDecorator('department',
+                  { initialValue: department._id, rules: [{ required: 'true', message: '请选择从属部门' }] })(
+                    <Select>{departmentsList.map((department) => {
+                      return (<Option key={department._id} value={department._id}>{department.name}</Option>)
                     })}</Select>)
               }
             </FormItem>

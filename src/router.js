@@ -8,6 +8,7 @@ import HomePage from './components/HomePage/HomePage'
 import Users from './components/Users/Users';
 import Units from './components/Units/Units';
 import Departments from './components/Departments/Departments'
+import Groups from './components/Gourps/Groups';
 
 
 function RouterConfig({ history }) {
@@ -21,7 +22,7 @@ function RouterConfig({ history }) {
             <Route path="/users" component={Users} />
             <Route path="/units" component={Units}></Route>
             <Route path="/departments" component={Departments}></Route>
-            <Route path="/groups"></Route>
+            <Route path="/groups" component={Groups}></Route>
           </Switch>
 
         </BasicLayout>
