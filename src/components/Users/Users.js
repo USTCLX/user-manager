@@ -2,22 +2,48 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-13 23:09:42
+ * @Last Modified time: 2018-05-14 23:47:57
  */
 
 import { connect } from 'dva';
 import { Table, Popconfirm, Button } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
-import {levelMap} from '../../constants';
+import { levelMap } from '../../constants';
 
-function Users({ list: dataSource, total, page: current, loading, dispatch ,units}) {
+function Users({ list: dataSource, total, page: current, loading, dispatch, unitsList = [], departmentsList = [], groupsList = [] }) {
 
-  dataSource.forEach((data)=>{
-    data.levelName = levelMap[data.level].name;
+  let options = unitsList.map((unit) => {
+    let options1 = {
+      label: unit.name,
+      value: unit._id,
+      children: []
+    }
+    departmentsList.forEach((department) => {
+      if (department.unit._id === unit._id) {
+        let options2 = {
+          label: department.name,
+          value: department._id,
+          children: []
+        }
+        groupsList.forEach((group) => {
+          if (group.department._id === department._id) {
+            let options3 = {
+              label: group.name,
+              value: group._id
+            }
+            options2.children.push(options3)
+          }
+        })
+        options1.children.push(options2)
+      }
+    })
+    return options1;
   })
 
-  // console.log('dataStource',dataSource);
+  dataSource.forEach((data) => {
+    data.levelName = levelMap[data.level].name;
+  })
 
   function deleteHandler(id) {
     dispatch({
@@ -70,7 +96,7 @@ function Users({ list: dataSource, total, page: current, loading, dispatch ,unit
       key: 'operation',
       render: (text, record) => (
         <span className={style.operation}>
-          <UserModal record={record} onOk={editHandler.bind(null, record._id)}>
+          <UserModal record={record} onOk={editHandler.bind(null, record._id)} options={options}>
             <a>编辑</a>
           </UserModal>
           <Popconfirm title="确定删除？" onConfirm={deleteHandler.bind(null, record._id)}>
@@ -85,7 +111,7 @@ function Users({ list: dataSource, total, page: current, loading, dispatch ,unit
     <div className={style.normal}>
       <div>
         <div className={style.create}>
-          <UserModal record={{}} onOk={createHandler}>
+          <UserModal record={{}} onOk={createHandler} options={options}>
             <Button type="primary">创建账户</Button>
           </UserModal>
         </div>
@@ -109,13 +135,15 @@ function Users({ list: dataSource, total, page: current, loading, dispatch ,unit
 }
 
 function mapStateToProps(state) {
-  const { list, total, page,units } = state.users;
+  const { list, total, page, unitsList, groupsList, departmentsList } = state.users;
   return {
     list,
     total,
     page,
-    units,
-    loading: state.loading.models.users
+    loading: state.loading.models.users,
+    unitsList,
+    groupsList,
+    departmentsList
   }
 }
 

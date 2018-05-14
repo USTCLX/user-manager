@@ -6,18 +6,26 @@ export default {
     list: [],
     total: null,
     page: null,
+    groupsList: [],
+    departmentsList: [],
+    unitsList: [],
   },
   reducers: {
-    save(state, { payload: { data: list, total, page } }) {
-      return { ...state, list, total, page };
+    save(state, { payload: { data: list, total, page, groupsList, departmentsList, unitsList } }) {
+      return { ...state, list, total, page, groupsList, departmentsList, unitsList };
     },
   },
   effects: {
     *fetch({ payload: { page = 1, limit } }, { call, put }) {
       const { data } = yield call(usersService.fetch, { page, limit });
-      const {list,pagination} = data;
-      // console.log('data',data);
-      yield put({ type: 'save', payload: { data: list, total: pagination.total, page: parseInt(pagination.current, 10) } });
+      const { list, pagination } = data;
+      const { data: groupsData } = yield call(usersService.fetchAllGroups);
+      const { data: departmentsData } = yield call(usersService.fetchAllDepartments);
+      const { data: unitsData } = yield call(usersService.fetchAllUnits);
+      const { list: groupsList } = groupsData;
+      const { list: departmentsList } = departmentsData;
+      const { list: unitsList } = unitsData;
+      yield put({ type: 'save', payload: { data: list, total: pagination.total, page, groupsList, departmentsList, unitsList}} );
     },
 
     *remove({ payload: { id } }, { call, put, select }) {
@@ -30,7 +38,7 @@ export default {
       }
     },
 
-    *patch({ payload: { id,values } }, { call, put, select }) {
+    *patch({ payload: { id, values } }, { call, put, select }) {
       // console.log('valuse',id);
       yield call(usersService.patch, id, values);
       const page = yield select(state => state.users.page);

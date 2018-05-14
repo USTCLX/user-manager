@@ -41,7 +41,7 @@ class GroupEditModal extends Component {
   }
 
   render() {
-    const { children, unitsList, departmentsList } = this.props;
+    const { children, departmentsList } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { name, department = {} } = this.props.record;
 
