@@ -9,7 +9,7 @@ export default {
     unitsList: []
   },
   reducers: {
-    save(state, { payload: { records: list, unitsList } }) {
+    save(state, { payload: { list, unitsList } }) {
       return { ...state, list, unitsList };
     },
   },
@@ -17,9 +17,9 @@ export default {
     *fetch({ payload }, { call, put }) {
       const { data } = yield call(organizationsService.fetch, organizationType.department);
       const { data: unitsData } = yield call(organizationsService.fetch, organizationType.unit);
-      const { records } = data;
+      const { records: list } = data;
       const { records: unitsList } = unitsData
-      yield put({ type: 'save', payload: { records, unitsList } });
+      yield put({ type: 'save', payload: { list, unitsList } });
     },
 
     *remove({ payload: { id } }, { call, put }) {

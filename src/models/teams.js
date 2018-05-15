@@ -1,5 +1,11 @@
 /*
  * @Author: lixiang 
+ * @Date: 2018-05-16 00:34:28 
+ * @Last Modified by: lixiang
+ * @Last Modified time: 2018-05-16 00:59:47
+ */
+/*
+ * @Author: lixiang 
  * @Date: 2018-05-14 12:28:47 
  * @Last Modified by: lixiang
  * @Last Modified time: 2018-05-16 00:33:01
@@ -9,29 +15,27 @@ import * as organizationsService from '../services/organizations';
 import { organizationType } from '../constants';
 
 export default {
-  namespace: 'groups',
+  namespace: 'teams',
   state: {
     list: [],
     unitsList: [],
     departmentsList: [],
-    teamsList: [],
   },
   reducers: {
-    save(state, { payload: { list, unitsList, departmentsList, teamsList } }) {
-      return { ...state, list, unitsList, departmentsList, teamsList };
+    save(state, { payload: { list, unitsList, departmentsList } }) {
+      // console.log('list', list, unitsList, departmentsList);
+      return { ...state, list, unitsList, departmentsList };
     },
   },
   effects: {
     *fetch({ payload: { page = 1, limit } }, { call, put }) {
-      const { data } = yield call(organizationsService.fetch, organizationType.group);
+      const { data } = yield call(organizationsService.fetch, organizationType.team);
       const { data: unitsData } = yield call(organizationsService.fetch, organizationType.unit);
       const { data: departmentsData } = yield call(organizationsService.fetch, organizationType.department);
-      const { data: teamsData } = yield call(organizationsService.fetch, organizationType.team);
       const { records: list } = data;
       const { records: unitsList } = unitsData
       const { records: departmentsList } = departmentsData;
-      const { records: teamsList } = teamsData
-      yield put({ type: 'save', payload: { list, unitsList, departmentsList, teamsList } });
+      yield put({ type: 'save', payload: { list, unitsList, departmentsList } });
     },
 
     *remove({ payload: { id } }, { call, put }) {
@@ -51,14 +55,14 @@ export default {
 
     *create({ payload: { values } }, { call, put }) {
       // console.log('*create values',values);
-      yield call(organizationsService.create, values, organizationType.group);
+      yield call(organizationsService.create, values, organizationType.team);
       yield yield put({ type: 'fetch', payload: {} });
     }
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/groups') {
+        if (pathname === '/teams') {
           dispatch({ type: 'fetch', payload: query || {} });
         }
       });
