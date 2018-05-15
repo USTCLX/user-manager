@@ -1,21 +1,45 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Cascader } from 'antd';
 
-const Option = Select.Option;
 const FormItem = Form.Item;
 
 
-class GroupEditModal extends Component {
+class DeparmentEditModal extends Component {
   constructor(props) {
     super();
     this.state = {
       visible: false,
+      options: [],
+      parentVal: [],
     };
+  }
+
+
+  resetOptions() {
+    let unitsList = this.props.unitsList;
+    let opts = (unitsList).map((unit) => {
+      return {
+        label: unit.name,
+        value: unit._id
+      }
+    })
+    this.setState({ options: opts });
+  }
+
+  resetParentVal() {
+    let { parent } = this.props.record;
+    let parentVal = (parent||[]).map((item)=>{
+      return item._id;
+    })
+    this.setState({parentVal});
   }
 
   showModalHandler = (e) => {
     if (e)
       e.stopPropagation();
+
+    this.resetOptions();
+    this.resetParentVal();
 
     this.setState({
       visible: true
@@ -41,9 +65,9 @@ class GroupEditModal extends Component {
   }
 
   render() {
-    const { children, unitsList } = this.props;
+    const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name,unit = {}} = this.props.record;
+    const { name } = this.props.record;
 
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -73,11 +97,9 @@ class GroupEditModal extends Component {
 
             <FormItem {...formItemLayout} label="从属中心">
               {
-                getFieldDecorator('unit',
-                  { initialValue: unit._id, rules: [{ required: 'true', message: '请选择从属中心' }] })(
-                    <Select>{unitsList.map((unit) => {
-                      return (<Option key={unit._id} value={unit._id}>{unit.name}</Option>)
-                    })}</Select>)
+                getFieldDecorator('parent',
+                  { initialValue: this.state.parentVal, rules: [{ required: 'true', message: '请选择从属中心' }] })(
+                    <Cascader options={this.state.options} placeholder="请选择" />)
               }
             </FormItem>
 
@@ -90,4 +112,4 @@ class GroupEditModal extends Component {
 
 }
 
-export default Form.create()(GroupEditModal);
+export default Form.create()(DeparmentEditModal);

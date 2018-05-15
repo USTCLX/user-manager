@@ -1,49 +1,49 @@
-import * as departmentsService from '../services/departments';
+import { message } from 'antd'
+import * as organizationsService from '../services/organizations';
+import { organizationType } from '../constants';
 
 export default {
   namespace: 'departments',
   state: {
     list: [],
-    total: null,
-    page: null,
     unitsList: []
   },
   reducers: {
-    save(state, { payload: { list, total, page, unitsList } }) {
-      return { ...state, list, total, page, unitsList };
+    save(state, { payload: { records: list, unitsList } }) {
+      return { ...state, list, unitsList };
     },
   },
   effects: {
-    *fetch({ payload: { page = 1, limit } }, { call, put }) {
-      const { data } = yield call(departmentsService.fetch, { page, limit });
-      const { data: unitsData } = yield call(departmentsService.fetchAllUnits);
-      const { list, pagination } = data;
-      const { list: unitsList } = unitsData
-      yield put({ type: 'save', payload: { list, total: pagination.total, page, unitsList } });
+    *fetch({ payload }, { call, put }) {
+      const { data } = yield call(organizationsService.fetch, organizationType.department);
+      const { data: unitsData } = yield call(organizationsService.fetch, organizationType.unit);
+      const { records } = data;
+      const { records: unitsList } = unitsData
+      yield put({ type: 'save', payload: { records, unitsList } });
     },
 
-    *remove({ payload: { id } }, { call, put, select }) {
+    *remove({ payload: { id } }, { call, put }) {
       if (!!id) {
-        yield call(departmentsService.remove, id);
-        const page = yield select(state => state.departments.page);
-        yield put({ type: 'fetch', payload: { page } })
+        yield call(organizationsService.remove, id);
+        yield put({ type: 'fetch', payload: {} })
       } else {
         // console.log('id is null')
       }
     },
 
-    *patch({ payload: { id, values } }, { call, put, select }) {
+    *patch({ payload: { id, values } }, { call, put }) {
       // console.log('valuse',id);
-      yield call(departmentsService.patch, id, values);
-      const page = yield select(state => state.departments.page);
-      yield put({ type: 'fetch', payload: { page } });
+      yield call(organizationsService.patch, id, values);
+      yield put({ type: 'fetch', payload: {} });
     },
 
-    *create({ payload: { values } }, { call, put, select }) {
-      // console.log('*create values',values);
-      yield call(departmentsService.create, values);
-      const page = yield select(state => state.departments.page);
-      yield yield put({ type: 'fetch', payload: { page } });
+    *create({ payload: { values } }, { call, put }) {
+      const { data } = yield call(organizationsService.create, values, organizationType.department);
+      if (data.status === 'ok') {
+        yield yield put({ type: 'fetch', payload: {} });
+      } else {
+        message.error('创建失败');
+      }
     }
   },
   subscriptions: {

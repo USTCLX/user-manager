@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-13 22:53:36
+ * @Last Modified time: 2018-05-15 23:55:40
  */
 
 import { connect } from 'dva';
@@ -64,8 +64,8 @@ function Departments({ list: dataSource, total, page: current, loading, dispatch
       render: val => <span>{moment(val).format('YYYY-MM-DD hh:mm')}</span>,
     }, {
       title: '从属中心',
-      dataIndex:'unit.name',
-      key:'unit',
+      dataIndex: 'parent[0].name',
+      key: 'unit',
     }, {
       title: '操作',
       key: 'operation',

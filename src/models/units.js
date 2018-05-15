@@ -1,47 +1,63 @@
-import * as unitsService from '../services/units';
+/*
+ * @Author: lixiang 
+ * @Date: 2018-05-15 22:20:54 
+ * @Last Modified by: lixiang
+ * @Last Modified time: 2018-05-15 22:54:32
+ */
+import * as organizationService from '../services/organizations';
+import { organizationType } from '../constants';
 
 export default {
   namespace: 'units',
   state: {
     list: [],
-    total: null,
-    page: null,
   },
   reducers: {
-    save(state, { payload: { data: list, total, page } }) {
-      return { ...state, list, total, page };
+    save(state, { payload: { records: list } }) {
+      return { ...state, list };
     },
   },
   effects: {
-    *fetch({ payload: { page = 1, limit } }, { call, put }) {
-      const { data } = yield call(unitsService.fetch, { page, limit });
-      const {list,pagination} = data;
-      // console.log('data',data);
-      yield put({ type: 'save', payload: { data: list, total: pagination.total, page: parseInt(pagination.current, 10) } });
-    },
-
-    *remove({ payload: { id } }, { call, put, select }) {
-      if (!!id) {
-        yield call(unitsService.remove, id);
-        const page = yield select(state => state.users.page);
-        yield put({ type: 'fetch', payload: { page } })
+    *fetch({ payload }, { call, put }) {
+      const { data } = yield call(organizationService.fetch, organizationType.unit);
+      if (data && data.status === 'ok') {
+        const { records } = data;
+        yield put({ type: 'save', payload: { records } });
       } else {
-        // console.log('id is null')
+        //error
       }
     },
 
-    *patch({ payload: { id,values } }, { call, put, select }) {
-      // console.log('valuse',id);
-      yield call(unitsService.patch, id, values);
-      const page = yield select(state => state.users.page);
-      yield put({ type: 'fetch', payload: { page } });
+    *remove({ payload: { id } }, { call, put }) {
+      if (!!id) {
+        const { data } = yield call(organizationService.remove, id);
+        if (data && data.status === 'ok') {
+          yield put({ type: 'fetch', payload: {} })
+        } else {
+          //error
+        }
+      } else {
+        //error
+      }
     },
 
-    *create({ payload: { values } }, { call, put, select }) {
-      // console.log('*create values',values);
-      yield call(unitsService.create, values);
-      const page = yield select(state => state.users.page);
-      yield yield put({ type: 'fetch', payload: { page } });
+    *patch({ payload: { id, values } }, { call, put }) {
+      // console.log('patch', id, values);
+      const { data } = yield call(organizationService.patch, id, values);
+      if (data && data.status === 'ok') {
+        yield put({ type: 'fetch', payload: {} });
+      } else {
+        //error
+      }
+    },
+
+    *create({ payload: { values } }, { call, put }) {
+      const { data } = yield call(organizationService.create, values, organizationType.unit);
+      if(data&&data.status==='ok'){
+        yield yield put({ type: 'fetch', payload: {} });
+      }else{
+        //error
+      }
     }
   },
   subscriptions: {
