@@ -1,3 +1,10 @@
+/*
+ * @Author: lixiang 
+ * @Date: 2018-05-16 23:47:22 
+ * @Last Modified by: lixiang
+ * @Last Modified time: 2018-05-17 00:05:32
+ */
+import { message } from 'antd';
 import * as usersService from '../services/users';
 import * as organizationService from '../services/organizations';
 import { organizationType } from '../constants'
@@ -18,11 +25,23 @@ export default {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const { data: usersData } = yield call(usersService.fetch);
-      const { data: unitsData } = yield call(organizationService.fetch, organizationType.unit);
-      const { data: departmentsData } = yield call(organizationService.fetch, organizationType.department);
-      const { data: teamsData } = yield call(organizationService.fetch, organizationType.team);
-      const { data: groupsData } = yield call(organizationService.fetch, organizationType.group);
+      const usersPromise = call(usersService.fetch);
+      const organizationsPromise = call(organizationService.fetch, organizationType.unit);
+      const departmentsPromise = call(organizationService.fetch, organizationType.department);
+      const teamsPromise = call(organizationService.fetch, organizationType.team);
+      const groupsPromise = call(organizationService.fetch, organizationType.group);
+
+      const { data: usersData } = yield usersPromise
+      const { data: unitsData } = yield organizationsPromise
+      const { data: departmentsData } = yield departmentsPromise
+      const { data: teamsData } = yield teamsPromise
+      const { data: groupsData } = yield groupsPromise
+
+      // const { data: usersData } = yield call(usersService.fetch);
+      // const { data: unitsData } = yield call(organizationService.fetch, organizationType.unit);
+      // const { data: departmentsData } = yield call(organizationService.fetch, organizationType.department);
+      // const { data: teamsData } = yield call(organizationService.fetch, organizationType.team);
+      // const { data: groupsData } = yield call(organizationService.fetch, organizationType.group);
 
       const { records: list } = usersData
       const { records: unitsList } = unitsData;
@@ -38,6 +57,7 @@ export default {
         yield put({ type: 'fetch', payload: {} })
       } else {
         // console.log('id is null')
+        message.error('删除出错，id为空');
       }
     },
 

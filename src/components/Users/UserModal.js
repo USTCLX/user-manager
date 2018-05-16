@@ -139,6 +139,22 @@ class UserEditModal extends Component {
     this.setState({ authority: opts });
   }
 
+  checkUsername(rule, value, callback){
+    const usernameReg = /^[麦谷_]+[\u4e00-\u9fa5]+$/
+    if(!usernameReg.test(value)){
+      callback('用户名只能是麦谷_加汉字')
+    }
+    callback()
+  }
+
+  checkPhone(rule, value, callback) {
+    const phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+    if (!phoneReg.test(value)) {
+      callback('手机号格式有误');
+    }
+    callback()
+  }
+
   showModalHandler = (e) => {
     if (e)
       e.stopPropagation();
@@ -156,6 +172,7 @@ class UserEditModal extends Component {
     this.setState({
       visible: false
     })
+    this.props.form.resetFields();
   }
 
   okHandler = () => {
@@ -180,6 +197,7 @@ class UserEditModal extends Component {
   // onAuthorityChange = (value) => {
   //   console.log('value', value);
   // }
+
 
   render() {
     const { children } = this.props;
@@ -231,7 +249,7 @@ class UserEditModal extends Component {
             <FormItem {...formItemLayout} label="用户名">
               {
                 getFieldDecorator('username',
-                  { initialValue: username||'麦谷_', rules: [{ required: 'true', message: '请输入用户名' }] })(<Input />)
+                  { initialValue: username || '麦谷_', rules: [{ required: 'true', message: '请输入用户名' },{validator:this.checkUsername}] })(<Input />)
               }
             </FormItem>
 
@@ -259,8 +277,8 @@ class UserEditModal extends Component {
             <FormItem {...formItemLayout} label="手机号码">
               {
                 getFieldDecorator('phone',
-                  { initialValue: phone, rules: [{ required: true, message: '手机号码为数字' }] })(
-                    <Input addonBefore={prefixSelector} type='number' />)
+                  { initialValue: phone, rules: [{ required: true, message: '请输入手机号码' }, { validator: this.checkPhone }] })(
+                    <Input addonBefore={prefixSelector} />)
               }
             </FormItem>
 
