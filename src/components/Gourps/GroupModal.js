@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Cascader } from 'antd';
 
-const Option = Select.Option;
+
 const FormItem = Form.Item;
 
 
@@ -10,12 +10,68 @@ class GroupEditModal extends Component {
     super();
     this.state = {
       visible: false,
+      options: [],
+      parentVal: [],
     };
+  }
+
+  resetOptions() {
+    const { unitsList = [], departmentsList = [], teamsList = [] } = this.props;
+    let opts = (unitsList || []).map((unit) => {
+      let children1 = [];
+
+      departmentsList.forEach((item) => {
+        let parent = item.parent || [];
+        let children2 = []
+
+        teamsList.forEach((team) => {
+          let parent = team.parent || [];
+          if (parent[1]._id === item._id) {
+            children2.push({
+              label: team.name,
+              value: team._id,
+            })
+          }
+        })
+
+        if (parent[0]._id === unit._id) {
+          if (children2.length !== 0) {
+            children1.push({
+              label: item.name,
+              value: item._id,
+              children: children2,
+            })
+          }
+        }
+      })
+      return {
+        label: unit.name,
+        value: unit._id,
+        children: children1,
+      }
+    })
+
+    opts = opts.filter((item)=>{
+      return item&&(item.children.length!==0);
+    })
+
+    this.setState({ options: opts });
+  }
+
+  resetParentVal() {
+    let { parent } = this.props.record;
+    let parentVal = (parent || []).map((item) => {
+      return item._id;
+    })
+    this.setState({ parentVal });
   }
 
   showModalHandler = (e) => {
     if (e)
       e.stopPropagation();
+
+    this.resetOptions();
+    this.resetParentVal();
 
     this.setState({
       visible: true
@@ -41,9 +97,9 @@ class GroupEditModal extends Component {
   }
 
   render() {
-    const { children, departmentsList } = this.props;
+    const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name, department = {} } = this.props.record;
+    const { name } = this.props.record;
 
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -57,37 +113,27 @@ class GroupEditModal extends Component {
           {children}
         </span>
         <Modal
-          title="编辑部门"
+          title="编辑小组"
           visible={this.state.visible}
           onOk={this.okHandler}
           onCancel={this.hideModalHandler}
         >
           <Form onSubmit={this.okHandler}>
 
-            <FormItem {...formItemLayout} label="部门名称">
+            <FormItem {...formItemLayout} label="小组名称">
               {
                 getFieldDecorator('name',
-                  { initialValue: name, rules: [{ required: 'true', message: '请输入部门名称' }] })(<Input />)
+                  { initialValue: name, rules: [{ required: 'true', message: '请输入小组名称' }] })(<Input />)
               }
             </FormItem>
 
-            {/* <FormItem {...formItemLayout} label="从属中心">
-              {
-                getFieldDecorator('unit',
-                  { initialValue: unit._id, rules: [{ required: 'true', message: '请选择从属中心' }] })(
-                    <Select>{unitsList.map((unit) => {
-                      return (<Option key={unit._id} value={unit._id}>{unit.name}</Option>)
-                    })}</Select>)
-              }
-            </FormItem> */}
 
-            <FormItem {...formItemLayout} label="从属部门">
+
+            <FormItem {...formItemLayout} label="从属战队">
               {
-                getFieldDecorator('department',
-                  { initialValue: department._id, rules: [{ required: 'true', message: '请选择从属部门' }] })(
-                    <Select>{departmentsList.map((department) => {
-                      return (<Option key={department._id} value={department._id}>{department.name}</Option>)
-                    })}</Select>)
+                getFieldDecorator('parent',
+                  { initialValue: this.state.parentVal, rules: [{ required: 'true', message: '请选择从属战队' }] })(
+                    <Cascader options={this.state.options} placeholder="请选择" />)
               }
             </FormItem>
 

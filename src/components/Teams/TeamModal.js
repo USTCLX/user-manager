@@ -109,7 +109,7 @@ class TeamEditModal extends Component {
               }
             </FormItem>
 
-            <FormItem {...formItemLayout} label="从属中心">
+            <FormItem {...formItemLayout} label="从属部门">
               {
                 getFieldDecorator('parent',
                   { initialValue: this.state.parentVal, rules: [{ required: 'true', message: '请选择从属部门' }] })(

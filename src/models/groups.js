@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-14 12:28:47 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 00:33:01
+ * @Last Modified time: 2018-05-16 01:02:55
  */
 import { message } from 'antd';
 import * as organizationsService from '../services/organizations';

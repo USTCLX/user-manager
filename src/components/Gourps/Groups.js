@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-14 12:55:07
+ * @Last Modified time: 2018-05-16 01:29:38
  */
 
 import { connect } from 'dva';
@@ -11,8 +11,7 @@ import { Table, Popconfirm, Button } from 'antd';
 import GroupModal from './GroupModal';
 import style from './Groups.less';
 
-function Groups({ list: dataSource, total, page: current, loading, dispatch, unitsList,departmentsList }) {
-
+function Groups({ list: dataSource, loading, dispatch, unitsList, departmentsList, teamsList }) {
   function deleteHandler(id) {
     dispatch({
       type: 'groups/remove',
@@ -21,15 +20,6 @@ function Groups({ list: dataSource, total, page: current, loading, dispatch, uni
       }
     })
   }
-
-  // function pageChangeHandler(page) {
-  //   dispatch({
-  //     type: 'groups/fetch',
-  //     payload: {
-  //       page
-  //     }
-  //   })
-  // }
 
   function editHandler(id, values) {
     dispatch({
@@ -47,7 +37,7 @@ function Groups({ list: dataSource, total, page: current, loading, dispatch, uni
 
   const columns = [
     {
-      title: '部门名称',
+      title: '小组名称',
       dataIndex: 'name',
       key: 'name',
       render: text => <a>{text}</a>,
@@ -63,18 +53,23 @@ function Groups({ list: dataSource, total, page: current, loading, dispatch, uni
       render: val => <span>{moment(val).format('YYYY-MM-DD hh:mm')}</span>,
     }, {
       title: '从属中心',
-      dataIndex:'department.unit.name',
-      key:'unit',
+      dataIndex: 'parent[0].name',
+      key: 'unit',
     }, {
       title: '从属部门',
-      dataIndex:'department.name',
-      key:'group',
+      dataIndex: 'parent[1].name',
+      key: 'department',
+    },
+    {
+      title: '从属战队',
+      dataIndex: 'parent[2].name',
+      key: 'team',
     }, {
       title: '操作',
       key: 'operation',
       render: (text, record) => (
         <span className={style.operation}>
-          <GroupModal record={record} onOk={editHandler.bind(null, record._id)} unitsList={unitsList} departmentsList={departmentsList} >
+          <GroupModal record={record} onOk={editHandler.bind(null, record._id)} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList} >
             <a>编辑</a>
           </GroupModal>
           <Popconfirm title="确定删除？" onConfirm={deleteHandler.bind(null, record._id)}>
@@ -89,7 +84,7 @@ function Groups({ list: dataSource, total, page: current, loading, dispatch, uni
     <div className={style.normal}>
       <div>
         <div className={style.create}>
-          <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList}>
+          <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList}>
             <Button type="primary">创建小组</Button>
           </GroupModal>
         </div>
@@ -106,14 +101,15 @@ function Groups({ list: dataSource, total, page: current, loading, dispatch, uni
 }
 
 function mapStateToProps(state) {
-  const { list, total, page, unitsList ,departmentsList} = state.groups;
+  const { list, total, page, unitsList, departmentsList, teamsList } = state.groups;
   return {
     list,
     total,
     page,
-    loading: state.loading.models.departments,
+    loading: state.loading.models.groups,
     unitsList,
-    departmentsList
+    departmentsList,
+    teamsList
   }
 }
 
