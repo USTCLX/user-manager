@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 23:47:22 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-17 00:05:32
+ * @Last Modified time: 2018-05-17 00:08:18
  */
 import { message } from 'antd';
 import * as usersService from '../services/users';
@@ -31,11 +31,11 @@ export default {
       const teamsPromise = call(organizationService.fetch, organizationType.team);
       const groupsPromise = call(organizationService.fetch, organizationType.group);
 
-      const { data: usersData } = yield usersPromise
-      const { data: unitsData } = yield organizationsPromise
-      const { data: departmentsData } = yield departmentsPromise
-      const { data: teamsData } = yield teamsPromise
-      const { data: groupsData } = yield groupsPromise
+      const { data: {records:list} } = yield usersPromise
+      const { data: {records:unitsList} } = yield organizationsPromise
+      const { data: {records:departmentsList} } = yield departmentsPromise
+      const { data: {records:teamsList} } = yield teamsPromise
+      const { data: {records:groupsList} } = yield groupsPromise
 
       // const { data: usersData } = yield call(usersService.fetch);
       // const { data: unitsData } = yield call(organizationService.fetch, organizationType.unit);
@@ -43,11 +43,11 @@ export default {
       // const { data: teamsData } = yield call(organizationService.fetch, organizationType.team);
       // const { data: groupsData } = yield call(organizationService.fetch, organizationType.group);
 
-      const { records: list } = usersData
-      const { records: unitsList } = unitsData;
-      const { records: departmentsList } = departmentsData;
-      const { records: teamsList } = teamsData;
-      const { records: groupsList } = groupsData;
+      // const { records: list } = usersData
+      // const { records: unitsList } = unitsData;
+      // const { records: departmentsList } = departmentsData;
+      // const { records: teamsList } = teamsData;
+      // const { records: groupsList } = groupsData;
       yield put({ type: 'save', payload: { list, groupsList, departmentsList, unitsList, teamsList } });
     },
 
