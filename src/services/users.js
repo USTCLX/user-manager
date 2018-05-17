@@ -14,16 +14,16 @@ export function remove(id){
   })
 }
 
-export function patch(id,values){
+export function put(id,values){
   return request(`/api/users/${id}`,{
-    method:'PATCH',
+    method:'PUT',
     body:values
   })
 }
 
 export function create(values){
   return request(`/api/users`,{
-    method:'PUT',
+    method:'POST',
     body:values
   })
 }

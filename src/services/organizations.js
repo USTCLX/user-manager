@@ -17,9 +17,9 @@ export function remove(id) {
   })
 }
 
-export function patch(id, values) {
+export function put(id, values) {
   return request(`/api/organizations/${id}`, {
-    method: 'PATCH',
+    method: 'PUT',
     body: values
   })
 }
@@ -28,7 +28,7 @@ export function create(values, type) {
   let newVal = Object.assign({}, values);
   newVal.type = type;
   return request(`/api/organizations`, {
-    method: 'PUT',
+    method: 'POST',
     body: newVal,
   })
 }
