@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 23:47:22 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-17 00:08:18
+ * @Last Modified time: 2018-05-19 23:21:54
  */
 import { message } from 'antd';
 import * as usersService from '../services/users';
@@ -37,17 +37,7 @@ export default {
       const { data: {records:teamsList} } = yield teamsPromise
       const { data: {records:groupsList} } = yield groupsPromise
 
-      // const { data: usersData } = yield call(usersService.fetch);
-      // const { data: unitsData } = yield call(organizationService.fetch, organizationType.unit);
-      // const { data: departmentsData } = yield call(organizationService.fetch, organizationType.department);
-      // const { data: teamsData } = yield call(organizationService.fetch, organizationType.team);
-      // const { data: groupsData } = yield call(organizationService.fetch, organizationType.group);
 
-      // const { records: list } = usersData
-      // const { records: unitsList } = unitsData;
-      // const { records: departmentsList } = departmentsData;
-      // const { records: teamsList } = teamsData;
-      // const { records: groupsList } = groupsData;
       yield put({ type: 'save', payload: { list, groupsList, departmentsList, unitsList, teamsList } });
     },
 
@@ -63,7 +53,7 @@ export default {
 
     *patch({ payload: { id, values } }, { call, put }) {
       // console.log('valuse',id);
-      yield call(usersService.patch, id, values);
+      yield call(usersService.put, id, values);
       yield put({ type: 'fetch', payload: {} });
     },
 

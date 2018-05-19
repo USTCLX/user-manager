@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-14 12:28:47 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 01:02:55
+ * @Last Modified time: 2018-05-19 23:20:51
  */
 import { message } from 'antd';
 import * as organizationsService from '../services/organizations';
@@ -45,7 +45,7 @@ export default {
 
     *patch({ payload: { id, values } }, { call, put }) {
       // console.log('valuse',id);
-      yield call(organizationsService.patch, id, values);
+      yield call(organizationsService.put, id, values);
       yield put({ type: 'fetch', payload: {} });
     },
 

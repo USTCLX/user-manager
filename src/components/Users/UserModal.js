@@ -21,7 +21,8 @@ class UserEditModal extends Component {
 
 
   resetOptions(level) {
-    if (level === -1) {
+    console.log('level', level);
+    if (!level) {
       this.setState({ options: [] });
       return;
     }
@@ -74,7 +75,7 @@ class UserEditModal extends Component {
     })
 
     switch (level) {
-      case 2:
+      case 'teamLeader':
         opts.forEach((unit) => {
           let children = unit.children
           if (children.length !== 0) {
@@ -89,7 +90,7 @@ class UserEditModal extends Component {
           }
         })
         break;
-      case 3:
+      case 'director':
         opts.forEach((unit) => {
           let children = unit.children
           if (children.length !== 0) {
@@ -99,17 +100,32 @@ class UserEditModal extends Component {
           }
         })
         break;
-      case 4:
+      case 'manager':
         opts.forEach((unit) => {
           unit.children = null;
         })
         break;
-      case 0:
-      case 1:
+      case 'operator':
+      case 'groupLeader':
+        // opts.forEach((unit, index) => {
+        //   if (unit.children.length === 0) {
+        //     delete opts[index];
+        //     return;
+        //   }
+        //   let children = unit.children;
+        //   children.forEach((department,index)=>{
+        //     if(department.children===0){
+        //       delete children[index];
+        //       return;
+        //     }
+        //   })
+        // });
+        break;
       default:
         break;
     }
 
+    console.log('opts',opts)
     this.setState({ options: opts });
   }
 
@@ -124,12 +140,13 @@ class UserEditModal extends Component {
   resetAuthority(level) {
     let opts = ['add', 'renew', 'pause', 'stop', 'audit'];
     switch (level) {
-      case 0:
+      case 'operator':
         opts = ['add', 'renew', 'pause', 'stop'];
         break;
-      case 1:
-      case 2:
-      case 3:
+      case 'groupLeader':
+      case 'teamLeader':
+      case 'director':
+      case 'manager':
         break;
       default:
         opts = [];
@@ -139,9 +156,9 @@ class UserEditModal extends Component {
     this.setState({ authority: opts });
   }
 
-  checkUsername(rule, value, callback){
+  checkUsername(rule, value, callback) {
     const usernameReg = /^[麦谷_]+[\u4e00-\u9fa5]+$/
-    if(!usernameReg.test(value)){
+    if (!usernameReg.test(value)) {
       callback('用户名只能是麦谷_加汉字')
     }
     callback()
@@ -249,7 +266,7 @@ class UserEditModal extends Component {
             <FormItem {...formItemLayout} label="用户名">
               {
                 getFieldDecorator('username',
-                  { initialValue: username || '麦谷_', rules: [{ required: 'true', message: '请输入用户名' },{validator:this.checkUsername}] })(<Input />)
+                  { initialValue: username || '麦谷_', rules: [{ required: 'true', message: '请输入用户名' }, { validator: this.checkUsername }] })(<Input />)
               }
             </FormItem>
 
@@ -297,11 +314,11 @@ class UserEditModal extends Component {
               {
                 getFieldDecorator('level',
                   { initialValue: level, rules: [{ required: true, message: '请选择职位' }] })(<Select placeholder="请选择职位" onChange={this.levelChangeHandler}>
-                    <Select.Option value={levelMap[0].id}>{levelMap[0].name}</Select.Option>
-                    <Select.Option value={levelMap[1].id}>{levelMap[1].name}</Select.Option>
-                    <Select.Option value={levelMap[2].id}>{levelMap[2].name}</Select.Option>
-                    <Select.Option value={levelMap[3].id}>{levelMap[3].name}</Select.Option>
-                    <Select.Option value={levelMap[4].id}>{levelMap[4].name}</Select.Option>
+                    <Select.Option value={levelMap[0].value}>{levelMap[0].name}</Select.Option>
+                    <Select.Option value={levelMap[1].value}>{levelMap[1].name}</Select.Option>
+                    <Select.Option value={levelMap[2].value}>{levelMap[2].name}</Select.Option>
+                    <Select.Option value={levelMap[3].value}>{levelMap[3].name}</Select.Option>
+                    <Select.Option value={levelMap[4].value}>{levelMap[4].name}</Select.Option>
                   </Select>)
               }
             </FormItem>

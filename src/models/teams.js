@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 00:34:28 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 00:59:47
+ * @Last Modified time: 2018-05-19 23:21:10
  */
 /*
  * @Author: lixiang 
@@ -49,7 +49,7 @@ export default {
 
     *patch({ payload: { id, values } }, { call, put }) {
       // console.log('valuse',id);
-      yield call(organizationsService.patch, id, values);
+      yield call(organizationsService.put, id, values);
       yield put({ type: 'fetch', payload: {} });
     },
 

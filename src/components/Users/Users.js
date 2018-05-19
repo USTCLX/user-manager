@@ -2,19 +2,19 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 02:02:52
+ * @Last Modified time: 2018-05-19 23:31:29
  */
 
 import { connect } from 'dva';
 import { Table, Popconfirm, Button } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
-import { levelMap } from '../../constants';
+import { levelNameMap } from '../../constants';
 
 function Users({ list: dataSource, loading, dispatch, unitsList = [], departmentsList = [], teamsList = [], groupsList = [] }) {
 
   dataSource.forEach((data) => {
-    data.levelName = levelMap[data.level].name;
+    data.levelName = levelNameMap[data.level];
   })
 
   function deleteHandler(id) {

@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-15 22:20:54 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-15 22:54:32
+ * @Last Modified time: 2018-05-19 23:21:20
  */
 import * as organizationService from '../services/organizations';
 import { organizationType } from '../constants';
@@ -43,7 +43,7 @@ export default {
 
     *patch({ payload: { id, values } }, { call, put }) {
       // console.log('patch', id, values);
-      const { data } = yield call(organizationService.patch, id, values);
+      const { data } = yield call(organizationService.put, id, values);
       if (data && data.status === 'ok') {
         yield put({ type: 'fetch', payload: {} });
       } else {

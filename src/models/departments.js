@@ -33,7 +33,7 @@ export default {
 
     *patch({ payload: { id, values } }, { call, put }) {
       // console.log('valuse',id);
-      yield call(organizationsService.patch, id, values);
+      yield call(organizationsService.put, id, values);
       yield put({ type: 'fetch', payload: {} });
     },
 
