@@ -21,7 +21,6 @@ class UserEditModal extends Component {
 
 
   resetOptions(level) {
-    console.log('level', level);
     if (!level) {
       this.setState({ options: [] });
       return;
@@ -74,8 +73,11 @@ class UserEditModal extends Component {
       }
     })
 
+    console.log('opts', opts);
     switch (level) {
       case 'teamLeader':
+        break;
+      case 'director':
         opts.forEach((unit) => {
           let children = unit.children
           if (children.length !== 0) {
@@ -90,7 +92,7 @@ class UserEditModal extends Component {
           }
         })
         break;
-      case 'director':
+      case 'manager':
         opts.forEach((unit) => {
           let children = unit.children
           if (children.length !== 0) {
@@ -100,32 +102,13 @@ class UserEditModal extends Component {
           }
         })
         break;
-      case 'manager':
-        opts.forEach((unit) => {
-          unit.children = null;
-        })
-        break;
       case 'operator':
       case 'groupLeader':
-        // opts.forEach((unit, index) => {
-        //   if (unit.children.length === 0) {
-        //     delete opts[index];
-        //     return;
-        //   }
-        //   let children = unit.children;
-        //   children.forEach((department,index)=>{
-        //     if(department.children===0){
-        //       delete children[index];
-        //       return;
-        //     }
-        //   })
-        // });
         break;
       default:
         break;
     }
 
-    console.log('opts',opts)
     this.setState({ options: opts });
   }
 
@@ -152,7 +135,6 @@ class UserEditModal extends Component {
         opts = [];
         break;
     }
-    // console.log(level, opts);
     this.setState({ authority: opts });
   }
 
@@ -318,7 +300,6 @@ class UserEditModal extends Component {
                     <Select.Option value={levelMap[1].value}>{levelMap[1].name}</Select.Option>
                     <Select.Option value={levelMap[2].value}>{levelMap[2].name}</Select.Option>
                     <Select.Option value={levelMap[3].value}>{levelMap[3].name}</Select.Option>
-                    <Select.Option value={levelMap[4].value}>{levelMap[4].name}</Select.Option>
                   </Select>)
               }
             </FormItem>
