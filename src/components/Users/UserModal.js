@@ -73,7 +73,6 @@ class UserEditModal extends Component {
       }
     })
 
-    console.log('opts', opts);
     switch (level) {
       case 'teamLeader':
         break;
