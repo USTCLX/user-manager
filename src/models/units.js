@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-15 22:20:54 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-19 23:21:20
+ * @Last Modified time: 2018-06-26 08:36:37
  */
 import * as organizationService from '../services/organizations';
 import { organizationType } from '../constants';
@@ -20,6 +20,7 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const { data } = yield call(organizationService.fetch, organizationType.unit);
+      console.log('data', data);
       if (data && data.status === 'ok') {
         const { records } = data;
         yield put({ type: 'save', payload: { records } });
@@ -53,9 +54,9 @@ export default {
 
     *create({ payload: { values } }, { call, put }) {
       const { data } = yield call(organizationService.create, values, organizationType.unit);
-      if(data&&data.status==='ok'){
+      if (data && data.status === 'ok') {
         yield yield put({ type: 'fetch', payload: {} });
-      }else{
+      } else {
         //error
       }
     }
