@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-06-11 23:00:12
+ * @Last Modified time: 2018-07-29 17:14:05
  */
 
 import { connect } from 'dva';
@@ -11,33 +11,41 @@ import UserModal from './UserModal';
 import style from './Users.less';
 import { levelNameMap } from '../../constants';
 
-function Users({ list: dataSource, loading, dispatch, unitsList = [], departmentsList = [], teamsList = [], groupsList = [] }) {
+function Users({ units, departments, teams, groups, users, loading, dispatch }) {
 
-  dataSource.forEach((data) => {
+  const { list } = users;
+
+  const { list: unitsList } = units;
+  const { list: departmentsList } = departments;
+  const { list: teamsList } = teams;
+  const { list: groupsList } = groups;
+
+
+  list.forEach((data) => {
     data.levelName = levelNameMap[data.level];
-  })
+  });
 
-  function deleteHandler(id) {
+  function deleteHandler(_id) {
     dispatch({
       type: 'users/remove',
       payload: {
-        id
+        _id
       }
     })
   }
 
 
-  function editHandler(id, values) {
+  function editHandler(_id, values) {
     dispatch({
-      type: 'users/patch',
-      payload: { id, values }
+      type: 'users/update',
+      payload: { _id, ...values }
     })
   }
 
   function createHandler(values) {
     dispatch({
       type: 'users/create',
-      payload: { values }
+      payload: { ...values }
     })
   }
 
@@ -105,7 +113,7 @@ function Users({ list: dataSource, loading, dispatch, unitsList = [], department
         </div>
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={list}
           rowKey={record => record._id}
           pagination={false}
           loading={loading}
@@ -115,17 +123,14 @@ function Users({ list: dataSource, loading, dispatch, unitsList = [], department
   )
 }
 
-function mapStateToProps(state) {
-  const { list, total, page, unitsList, groupsList, departmentsList, teamsList } = state.users;
+function mapStateToProps({ units, departments, teams, groups, users, loading }) {
   return {
-    list,
-    total,
-    page,
-    loading: state.loading.models.users,
-    unitsList,
-    groupsList,
-    departmentsList,
-    teamsList
+    units,
+    departments,
+    teams,
+    groups,
+    users,
+    loading: loading.global,
   }
 }
 

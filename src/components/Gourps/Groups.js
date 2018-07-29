@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 01:29:38
+ * @Last Modified time: 2018-07-29 16:57:26
  */
 
 import { connect } from 'dva';
@@ -11,27 +11,43 @@ import { Table, Popconfirm, Button } from 'antd';
 import GroupModal from './GroupModal';
 import style from './Groups.less';
 
-function Groups({ list: dataSource, loading, dispatch, unitsList, departmentsList, teamsList }) {
-  function deleteHandler(id) {
+function Groups({ units, departments, teams, groups, loading, dispatch }) {
+
+  // const { list, pagination: { current, total, pageSize } } = groups;
+  const { list } = groups;
+  const { list: unitsList } = units;
+  const { list: departmentsList } = departments;
+  const { list: teamsList } = teams;
+
+  function deleteHandler(_id) {
     dispatch({
       type: 'groups/remove',
       payload: {
-        id
+        _id
       }
     })
   }
 
-  function editHandler(id, values) {
+  // function pageChangeHandler(page) {
+  //   dispatch({
+  //     type: 'goups/fetch',
+  //     payload: {
+  //       currentPage: page
+  //     }
+  //   })
+  // }
+
+  function editHandler(_id, values) {
     dispatch({
-      type: 'groups/patch',
-      payload: { id, values }
+      type: 'groups/update',
+      payload: { _id, ...values }
     })
   }
 
   function createHandler(values) {
     dispatch({
       type: 'groups/create',
-      payload: { values }
+      payload: { ...values }
     })
   }
 
@@ -82,34 +98,37 @@ function Groups({ list: dataSource, loading, dispatch, unitsList, departmentsLis
 
   return (
     <div className={style.normal}>
-      <div>
-        <div className={style.create}>
-          <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList}>
-            <Button type="primary">创建小组</Button>
-          </GroupModal>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          rowKey={record => record._id}
-          pagination={false}
-          loading={loading}
-        />
+      <div className={style.create}>
+        <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList}>
+          <Button type="primary">创建小组</Button>
+        </GroupModal>
       </div>
+      <Table
+        columns={columns}
+        dataSource={list}
+        rowKey={record => record._id}
+        pagination={false}
+        loading={loading}
+      />
+      {/* <Pagination
+        className="ant-table-pagination"
+        total={total}
+        current={current}
+        pageSize={pageSize}
+        showTotal={(total, range) => `共条数: ${total}`}
+        onChange={pageChangeHandler}
+      /> */}
     </div>
   )
 }
 
-function mapStateToProps(state) {
-  const { list, total, page, unitsList, departmentsList, teamsList } = state.groups;
+function mapStateToProps({ units, departments, teams, groups, loading }) {
   return {
-    list,
-    total,
-    page,
-    loading: state.loading.models.groups,
-    unitsList,
-    departmentsList,
-    teamsList
+    units,
+    departments,
+    teams,
+    groups,
+    loading: loading.global,
   }
 }
 

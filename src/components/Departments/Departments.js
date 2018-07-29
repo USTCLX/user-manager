@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 00:42:20
+ * @Last Modified time: 2018-07-29 16:01:06
  */
 
 import { connect } from 'dva';
@@ -10,15 +10,18 @@ import moment from 'moment';
 import { Table, Popconfirm, Button } from 'antd';
 import DepartmentModal from './DepartmentModal';
 import style from './Departments.less';
-// import { PAGE_SIZE } from '../../constants';
 
-function Departments({ list: dataSource, total, page: current, loading, dispatch, unitsList }) {
+function Departments({ units, departments, loading, dispatch }) {
 
-  function deleteHandler(id) {
+  // const { list, pagination: { current, total, pageSize } } = departments;
+  const { list } = departments;
+  const { list: unitsList } = units;
+
+  function deleteHandler(_id) {
     dispatch({
       type: 'departments/remove',
       payload: {
-        id
+        _id
       }
     })
   }
@@ -27,22 +30,22 @@ function Departments({ list: dataSource, total, page: current, loading, dispatch
   //   dispatch({
   //     type: 'departments/fetch',
   //     payload: {
-  //       page
+  //       currentPage: page
   //     }
   //   })
   // }
 
-  function editHandler(id, values) {
+  function editHandler(_id, values) {
     dispatch({
-      type: 'departments/patch',
-      payload: { id, values }
+      type: 'departments/update',
+      payload: { _id, ...values },
     })
   }
 
   function createHandler(values) {
     dispatch({
       type: 'departments/create',
-      payload: { values }
+      payload: { ...values },
     })
   }
 
@@ -92,24 +95,29 @@ function Departments({ list: dataSource, total, page: current, loading, dispatch
         </div>
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={list}
           rowKey={record => record._id}
           pagination={false}
           loading={loading}
         />
+        {/* <Pagination
+          className="ant-table-pagination"
+          total={total}
+          current={current}
+          pageSize={pageSize}
+          showTotal={(total, range) => `共条数: ${total}`}
+          onChange={pageChangeHandler}
+        /> */}
       </div>
     </div>
   )
 }
 
-function mapStateToProps(state) {
-  const { list, total, page, unitsList} = state.departments;
+function mapStateToProps({ units, departments, loading }) {
   return {
-    list,
-    total,
-    page,
-    loading: state.loading.models.departments,
-    unitsList,
+    units,
+    departments,
+    loading: loading.global,
   }
 }
 

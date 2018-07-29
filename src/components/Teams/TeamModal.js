@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Cascader } from 'antd';
+import { Modal, Form, Input, Cascader, message } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -15,10 +15,11 @@ class TeamEditModal extends Component {
   }
 
 
+  // 更新select的option
   resetOptions() {
-    const { unitsList = [], departmentsList = [] }=this.props;
+    const { unitsList = [], departmentsList = [] } = this.props;
 
-    let opts = (unitsList || []).map((unit) => {
+    let opts = unitsList.map((unit) => {
       let children = [];
 
       departmentsList.forEach((item) => {
@@ -29,12 +30,16 @@ class TeamEditModal extends Component {
             value: item._id,
           })
         }
-      })
+      });
       return {
         label: unit.name,
         value: unit._id,
         children,
       }
+    })
+
+    opts = opts.filter(opt => {
+      return opt.children.length !== 0;
     })
 
     this.setState({ options: opts });
@@ -72,6 +77,10 @@ class TeamEditModal extends Component {
       if (err) {
         // console.log('err', err);
       } else {
+        if (values.parent.length !== 2) {
+          message.error('数据有误,战队的必须依次归属于中心>部门');
+          return;
+        }
         onOk(values);
         this.hideModalHandler();
       }

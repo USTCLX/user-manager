@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Cascader } from 'antd';
+import { Modal, Form, Input, Cascader, message } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -28,10 +28,10 @@ class DeparmentEditModal extends Component {
 
   resetParentVal() {
     let { parent } = this.props.record;
-    let parentVal = (parent||[]).map((item)=>{
+    let parentVal = (parent || []).map((item) => {
       return item._id;
     })
-    this.setState({parentVal});
+    this.setState({ parentVal });
   }
 
   showModalHandler = (e) => {
@@ -58,6 +58,10 @@ class DeparmentEditModal extends Component {
       if (err) {
         // console.log('err', err);
       } else {
+        if (values.parent.length !== 1) {
+          message.error('数据有误,部门的必须依次归属于中心');
+          return;
+        }
         onOk(values);
         this.hideModalHandler();
       }

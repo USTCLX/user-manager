@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Select, Cascader, Checkbox } from 'antd';
+import { Modal, Form, Input, Select, Cascader, Checkbox, message } from 'antd';
 import { levelMap } from '../../constants';
-// import departments from '../../models/departments';
 
 const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
@@ -25,8 +24,21 @@ class UserEditModal extends Component {
       this.setState({ options: [] });
       return;
     }
+
+    const recursion = (arr, stopType = 'department') => {
+      if (!arr)
+        return;
+      arr.forEach(item => {
+        if (item.type === stopType) {
+          item.children = null;
+        } else {
+          recursion(item.children, stopType);
+        }
+      });
+    }
+
     const { unitsList = [], departmentsList = [], teamsList = [], groupsList = [] } = this.props;
-    let opts = (unitsList || []).map((unit) => {
+    let opts = unitsList.map((unit) => {
 
       let children1 = [];
       departmentsList.forEach((item) => {
@@ -42,7 +54,8 @@ class UserEditModal extends Component {
             if (parent[2]._id === team._id) {
               children3.push({
                 label: group.name,
-                value: group._id
+                value: group._id,
+                type: group.type,
               })
             }
           })
@@ -51,6 +64,7 @@ class UserEditModal extends Component {
             children2.push({
               label: team.name,
               value: team._id,
+              type: team.type,
               children: children3
             })
           }
@@ -60,51 +74,32 @@ class UserEditModal extends Component {
           children1.push({
             label: item.name,
             value: item._id,
+            type: item.type,
             children: children2,
           })
-
         }
       })
 
       return {
         label: unit.name,
         value: unit._id,
+        type: unit.type,
         children: children1
       }
-    })
+    });
 
     switch (level) {
-      case 'teamLeader':
+      case 'manager':
+        recursion(opts, 'department');
         break;
       case 'director':
-        opts.forEach((unit) => {
-          let children = unit.children
-          if (children.length !== 0) {
-            children.forEach((department) => {
-              let children = department.children;
-              if (children.length !== 0) {
-                children.forEach((team) => {
-                  team.children = null;
-                })
-              }
-            })
-          }
-        })
+        recursion(opts, 'team');
         break;
-      case 'manager':
-        opts.forEach((unit) => {
-          let children = unit.children
-          if (children.length !== 0) {
-            children.forEach((department) => {
-              department.children = null;
-            })
-          }
-        })
-        break;
-      case 'operator':
       case 'groupLeader':
+      case 'operator':
         break;
       default:
+        opts = [];
         break;
     }
 
@@ -179,6 +174,59 @@ class UserEditModal extends Component {
       if (err) {
         // console.log('err', err);
       } else {
+        console.log('values', values);
+        const { parent, level } = values;
+        let pass = true;
+        switch (level) {
+          case 'manager':
+            if (parent.length !== 2) {
+              pass = false;
+            } else {
+              pass = true;
+              values.department = parent[1];
+              values.unit = parent[0];
+            }
+            break;
+          case 'director':
+            if (parent.length !== 3) {
+              pass = false;
+            } else {
+              pass = true;
+              values.team = parent[2];
+              values.director = parent[1];
+              values.unit = parent[0];
+            }
+            break;
+          case 'groupLeader':
+            if (parent.length !== 4) {
+              pass = false;
+            } else {
+              pass = true;
+              values.group = parent[3];
+              values.team = parent[2];
+              values.director = parent[1];
+              values.unit = parent[0];
+            }
+            break;
+          case 'operator':
+            if (parent.length !== 4) {
+              pass = false;
+            } else {
+              pass = true;
+              values.group = parent[3];
+              values.team = parent[2];
+              values.director = parent[1];
+              values.unit = parent[0];
+            }
+            break;
+          default:
+            pass = false;
+            break;
+        }
+        if (!pass) {
+          message.error('参数有误，请检查职位与从属小组');
+          return;
+        }
         onOk(values);
         this.hideModalHandler();
       }

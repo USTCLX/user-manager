@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:08:50 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-16 00:51:44
+ * @Last Modified time: 2018-07-29 10:54:14
  */
 
 import { Layout, Menu, Icon } from 'antd';
@@ -47,9 +47,6 @@ function BasicLayout({ children }) {
           <Content style={{ padding: '20px 50px', height: 'calc(100vh - 60px)', overflow: 'auto' }}>
             {children}
           </Content>
-          {/* <Footer style={{ textAlign: 'center' }}>
-            麦谷电子商务有限公司
-          </Footer> */}
         </Layout>
       </Layout>
     </Layout>

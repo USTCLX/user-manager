@@ -2,72 +2,103 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 23:47:22 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-19 23:21:54
+ * @Last Modified time: 2018-07-29 17:17:17
  */
+import { fetch, fetchAll, update, create, remove } from '../services/users';
 import { message } from 'antd';
-import * as usersService from '../services/users';
-import * as organizationService from '../services/organizations';
-import { organizationType } from '../constants'
 
 export default {
   namespace: 'users',
   state: {
     list: [],
-    unitsList: [],
-    departmentsList: [],
-    teamsList: [],
-    groupsList: [],
-  },
-  reducers: {
-    save(state, { payload: { list, unitsList, departmentsList, teamsList, groupsList } }) {
-      return { ...state, list, unitsList, departmentsList, groupsList, teamsList };
-    },
+    pagination: {
+      total: 0,
+      current: 1,
+      pageSize: 10,
+    }
   },
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const usersPromise = call(usersService.fetch);
-      const organizationsPromise = call(organizationService.fetch, organizationType.unit);
-      const departmentsPromise = call(organizationService.fetch, organizationType.department);
-      const teamsPromise = call(organizationService.fetch, organizationType.team);
-      const groupsPromise = call(organizationService.fetch, organizationType.group);
+    *create({ payload }, { call, put }) {
+      payload = Object.assign({}, payload);
 
-      const { data: {records:list} } = yield usersPromise
-      const { data: {records:unitsList} } = yield organizationsPromise
-      const { data: {records:departmentsList} } = yield departmentsPromise
-      const { data: {records:teamsList} } = yield teamsPromise
-      const { data: {records:groupsList} } = yield groupsPromise
+      const response = yield call(create, payload);
 
-
-      yield put({ type: 'save', payload: { list, groupsList, departmentsList, unitsList, teamsList } });
-    },
-
-    *remove({ payload: { id } }, { call, put }) {
-      if (!!id) {
-        yield call(usersService.remove, id);
-        yield put({ type: 'fetch', payload: {} })
+      if (response && response.status === 'ok') {
+        yield yield put({ type: 'fetchAll' });
       } else {
-        // console.log('id is null')
-        message.error('删除出错，id为空');
+        message.error('创建失败');
       }
     },
 
-    *patch({ payload: { id, values } }, { call, put }) {
-      // console.log('valuse',id);
-      yield call(usersService.put, id, values);
-      yield put({ type: 'fetch', payload: {} });
+    *fetch({ payload }, { call, put, select }) {
+      const pagination = yield select(state => state.users.pagination);
+      payload = Object.assign(
+        { currentPage: pagination.current, pageSize: pagination.pageSize },
+        payload,
+      );
+
+      const response = yield call(fetch, payload);
+
+      if (response && response.status === 'ok') {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        })
+      } else {
+        message.error('获取用户信息出错，请重试');
+      }
     },
 
-    *create({ payload: { values } }, { call, put }) {
-      // console.log('*create values',values);
-      yield call(usersService.create, values);
-      yield yield put({ type: 'fetch', payload: {} });
-    }
+    *fetchAll({ payload }, { call, put }) {
+      payload = Object.assign({}, payload);
+
+      const response = yield call(fetchAll, payload);
+
+      if (response && response.status === 'ok') {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        })
+      } else {
+        message.error('获取用户信息出错，请重试');
+      }
+    },
+
+    *remove({ payload }, { call, put }) {
+      const response = yield call(remove, payload);
+      if (response && response.status === 'ok') {
+        yield put({ type: 'fetchAll' });
+      } else {
+        //error
+        message.error('删除用户出错');
+      }
+    },
+
+    *update({ payload }, { call, put }) {
+      const response = yield call(update, payload);
+      if (response && response.status === 'ok') {
+        yield put({ type: 'fetchAll' });
+      } else {
+        //error
+        message.error('更新用户新出错');
+      }
+    },
+
+  },
+  reducers: {
+    save(state, { payload }) {
+      return { ...state, ...payload };
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/users') {
-          dispatch({ type: 'fetch', payload: query || {} });
+          dispatch({ type: 'units/fetchAll' });
+          dispatch({ type: 'departments/fetchAll' });
+          dispatch({ type: 'teams/fetchAll' });
+          dispatch({ type: 'groups/fetchAll' });
+          dispatch({ type: 'fetchAll', payload: query || {} });
         }
       });
     },

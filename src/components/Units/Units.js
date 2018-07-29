@@ -2,23 +2,26 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-13 20:43:07
+ * @Last Modified time: 2018-07-29 15:58:21
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
 import { Table, Popconfirm, Button } from 'antd';
-import UserModal from './UnitModal';
+import UnitModal from './UnitModal';
 import style from './Units.less';
-// import { PAGE_SIZE } from '../../constants';
 
-function Units({ list: dataSource, total, page: current, loading, dispatch }) {
+function Units({ units, loading, dispatch }) {
 
-  function deleteHandler(id) {
+  // const { list, pagination: { total, current, pageSize } } = units;
+  const { list } = units;
+
+
+  function deleteHandler(_id) {
     dispatch({
       type: 'units/remove',
       payload: {
-        id
+        _id
       }
     })
   }
@@ -27,22 +30,22 @@ function Units({ list: dataSource, total, page: current, loading, dispatch }) {
   //   dispatch({
   //     type: 'units/fetch',
   //     payload: {
-  //       page
+  //       currentPage: page,
   //     }
   //   })
   // }
 
-  function editHandler(id, values) {
+  function editHandler(_id, values) {
     dispatch({
-      type: 'units/patch',
-      payload: { id, values }
+      type: 'units/update',
+      payload: { _id, ...values },
     })
   }
 
   function createHandler(values) {
     dispatch({
       type: 'units/create',
-      payload: { values }
+      payload: { ...values },
     })
   }
 
@@ -67,9 +70,9 @@ function Units({ list: dataSource, total, page: current, loading, dispatch }) {
       key: 'operation',
       render: (text, record) => (
         <span className={style.operation}>
-          <UserModal record={record} onOk={editHandler.bind(null, record._id)}>
+          <UnitModal record={record} onOk={editHandler.bind(null, record._id)}>
             <a>编辑</a>
-          </UserModal>
+          </UnitModal>
           <Popconfirm title="确定删除？" onConfirm={deleteHandler.bind(null, record._id)}>
             <a href="">删除</a>
           </Popconfirm>
@@ -81,36 +84,34 @@ function Units({ list: dataSource, total, page: current, loading, dispatch }) {
   return (
     <div className={style.normal}>
       <div className={style.create}>
-        <UserModal record={{}} onOk={createHandler}>
+        <UnitModal record={{}} onOk={createHandler}>
           <Button type="primary">创建中心</Button>
-        </UserModal>
+        </UnitModal>
       </div>
       <Table
         columns={columns}
-        dataSource={dataSource}
+        dataSource={list}
         rowKey={record => record._id}
         pagination={false}
         loading={loading}
       />
       {/* <Pagination
-      className="ant-table-pagination"
-      total={total}
-      current={current}
-      pageSize={PAGE_SIZE}
-      onChange={pageChangeHandler}
+        className="ant-table-pagination"
+        total={total}
+        current={current}
+        pageSize={pageSize}
+        showTotal={(total, range) => `共条数: ${total}`}
+        onChange={pageChangeHandler}
       /> */}
 
     </div>
   )
 }
 
-function mapStateToProps(state) {
-  const { list, total, page } = state.units;
+function mapStateToProps({ units, loading }) {
   return {
-    list,
-    total,
-    page,
-    loading: state.loading.models.units
+    units,
+    loading: loading.effects['units/fetch'],
   }
 }
 

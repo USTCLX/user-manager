@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Cascader } from 'antd';
+import { Modal, Form, Input, Cascader, message } from 'antd';
 
 
 const FormItem = Form.Item;
@@ -17,7 +17,8 @@ class GroupEditModal extends Component {
 
   resetOptions() {
     const { unitsList = [], departmentsList = [], teamsList = [] } = this.props;
-    let opts = (unitsList || []).map((unit) => {
+
+    let opts = unitsList.map((unit) => {
       let children1 = [];
 
       departmentsList.forEach((item) => {
@@ -51,8 +52,8 @@ class GroupEditModal extends Component {
       }
     })
 
-    opts = opts.filter((item)=>{
-      return item&&(item.children.length!==0);
+    opts = opts.filter((item) => {
+      return item && (item.children.length !== 0);
     })
 
     this.setState({ options: opts });
@@ -90,6 +91,12 @@ class GroupEditModal extends Component {
       if (err) {
         // console.log('err', err);
       } else {
+
+        if (values.parent.length !== 3) {
+          message.error('数据有误,小组的必须一次归属于中心>部门>战队');
+          return;
+        }
+
         onOk(values);
         this.hideModalHandler();
       }
@@ -126,8 +133,6 @@ class GroupEditModal extends Component {
                   { initialValue: name, rules: [{ required: 'true', message: '请输入小组名称' }] })(<Input />)
               }
             </FormItem>
-
-
 
             <FormItem {...formItemLayout} label="从属战队">
               {
