@@ -174,7 +174,6 @@ class UserEditModal extends Component {
       if (err) {
         // console.log('err', err);
       } else {
-        console.log('values', values);
         const { parent, level } = values;
         let pass = true;
         switch (level) {
