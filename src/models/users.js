@@ -24,9 +24,10 @@ export default {
       const response = yield call(create, payload);
 
       if (response && response.status === 'ok') {
+        message.info('创建成功');
         yield yield put({ type: 'fetchAll' });
       } else {
-        message.error('创建失败');
+        message.error(response.message||'创建失败');
       }
     },
 
