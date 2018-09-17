@@ -14,6 +14,7 @@ app.model(require('./models/units').default);
 app.model(require('./models/departments').default);
 app.model(require('./models/teams').default);
 app.model(require('./models/groups.js').default);
+app.model(require('./models/serviceType').default);
 
 // 4. Router
 app.router(require('./router').default);

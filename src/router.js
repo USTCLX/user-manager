@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch} from 'dva/router';
+import { Router, Route, Switch } from 'dva/router';
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
@@ -10,6 +10,7 @@ import Units from './components/Units/Units';
 import Departments from './components/Departments/Departments'
 import Teams from './components/Teams/Teams';
 import Groups from './components/Gourps/Groups';
+import ServiceType from './components/ServiceType/ServiceType'
 
 
 function RouterConfig({ history }) {
@@ -25,6 +26,7 @@ function RouterConfig({ history }) {
             <Route path="/departments" component={Departments}></Route>
             <Route path='/teams' component={Teams}></Route>
             <Route path="/groups" component={Groups}></Route>
+            <Route path="/serviceType" component={ServiceType}></Route>
           </Switch>
 
         </BasicLayout>

@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:08:50 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 10:54:14
+ * @Last Modified time: 2018-09-17 20:09:56
  */
 
 import { Layout, Menu, Icon } from 'antd';
@@ -40,6 +40,10 @@ function BasicLayout({ children }) {
               <Menu.Item key="teams"><Link to="/teams">战队管理</Link></Menu.Item>
               <Menu.Item key="groups"><Link to="/groups">小组管理</Link></Menu.Item>
               <Menu.Item key="users"><Link to="/users">用户管理</Link></Menu.Item>
+            </SubMenu>
+
+            <SubMenu key="serviceType" title={<span><Icon type="bars" theme="outlined" />数据管理</span>}>
+              <Menu.Item key="serviceType"><Link to="/serviceType">套餐管理</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
