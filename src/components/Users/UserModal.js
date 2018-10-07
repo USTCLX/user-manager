@@ -203,7 +203,7 @@ class UserEditModal extends Component {
               pass = true;
               values.group = parent[3];
               values.team = parent[2];
-              values.director = parent[1];
+              values.department = parent[1];
               values.unit = parent[0];
             }
             break;
