@@ -1,7 +1,7 @@
 
-const publicPath = process.env.NODE_ENV==='production'?'/admin/':'/';
+const publicPath = process.env.NODE_ENV === 'production' ? '/admin/' : '/';
 
-console.log('publicPath',publicPath);
+console.log('publicPath', publicPath);
 
 export default {
   "proxy": {
@@ -13,8 +13,9 @@ export default {
   "extraBabelPlugins": [
     ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
   ],
+  outputPath: '../new_operate/server/static/admin',
   publicPath: publicPath,
-  hash:true,
+  hash: true,
   html: {
     template: './src/index.ejs',
   },

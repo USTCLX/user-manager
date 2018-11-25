@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:13:30 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-09-17 22:32:28
+ * @Last Modified time: 2018-11-25 18:04:51
  */
 
 import { connect } from 'dva';
@@ -21,21 +21,30 @@ function ServiceType({ serviceType, loading, dispatch }) {
       dataIndex: 'index',
       key: 'index',
       render: (text, record, index) => <a>{index + 1}</a>
-    }, {
+    },
+    {
       title: '套餐名称',
       dataIndex: 'name',
       key: 'name',
-    }, {
+    },
+    {
+      title: '最低限价',
+      dataIndex: 'limitPrice',
+      key: 'limitPrice',
+    },
+    {
       title: '创建日期',
       dataIndex: 'createTime',
       key: 'createTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD hh:mm')}</span>
-    }, {
+    },
+    {
       title: '修改日期',
       dataIndex: 'lastModifiedTime',
       key: 'lastModifiedTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD hh:mm')}</span>
-    }, {
+    },
+    {
       title: '操作',
       key: 'operation',
       render: (text, record, index) => (

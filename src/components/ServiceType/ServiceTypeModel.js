@@ -2,10 +2,10 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:55:25 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-09-17 21:06:39
+ * @Last Modified time: 2018-11-25 18:11:21
  */
 import { Component } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -40,7 +40,7 @@ class ServiceTypeModal extends Component {
         return;
       } else {
         Object.keys(values).map(key => {
-          return values[key] = values[key].trim()
+          return values[key] = values[key].trim ? values[key].trim() : values[key];
         });
         onOk(values);
         this.hideModalHandler();
@@ -51,7 +51,7 @@ class ServiceTypeModal extends Component {
   render() {
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name } = this.props.record;
+    const { name, limitPrice } = this.props.record;
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 }
@@ -75,6 +75,18 @@ class ServiceTypeModal extends Component {
                 getFieldDecorator('name',
                   { initialValue: name, rules: [{ required: 'true', message: '套餐名称' }] })(<Input />)
               }
+            </FormItem>
+
+            <FormItem {...formItemLayout} label="最低限价">
+              {
+                getFieldDecorator('limitPrice',
+                  { initialValue: limitPrice, rules: [{ required: true, message: '最低限价' }] })(
+                    <InputNumber
+                      style={{ width: '100%' }}
+                      min={0} />
+                  )
+              }
+
             </FormItem>
 
           </Form>
