@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router, Route, Switch } from 'dva/router';
+import { connect } from 'dva';
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
@@ -10,7 +11,8 @@ import Units from './components/Units/Units';
 import Departments from './components/Departments/Departments'
 import Teams from './components/Teams/Teams';
 import Groups from './components/Gourps/Groups';
-import ServiceType from './components/ServiceType/ServiceType'
+import ServiceType from './components/ServiceType/ServiceType';
+import NotAuthorized from './components/NotAuthorized';
 
 
 function RouterConfig({ history }) {
@@ -27,6 +29,7 @@ function RouterConfig({ history }) {
             <Route path='/teams' component={Teams}></Route>
             <Route path="/groups" component={Groups}></Route>
             <Route path="/serviceType" component={ServiceType}></Route>
+            <Route path="/not-authorized" component={NotAuthorized}></Route>
           </Switch>
 
         </BasicLayout>
