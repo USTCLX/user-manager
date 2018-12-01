@@ -2,12 +2,13 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 00:34:28 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 16:53:37
+ * @Last Modified time: 2018-12-01 23:12:08
  */
 
 import { create, fetch, fetchAll, update, remove } from '../services/organizations';
 import { organizationType } from '../constants';
 import { message } from 'antd';
+import { getAuthorized } from '../utils/sessionHelper';
 
 
 export default {
@@ -104,7 +105,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/teams') {
+        if (pathname === '/teams' && getAuthorized()) {
           dispatch({ type: 'units/fetchAll' });
           dispatch({ type: 'departments/fetchAll' });
           dispatch({ type: 'fetchAll', payload: query || {} });

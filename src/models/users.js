@@ -2,10 +2,11 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 23:47:22 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 17:17:17
+ * @Last Modified time: 2018-12-01 23:12:58
  */
 import { fetch, fetchAll, update, create, remove } from '../services/users';
 import { message } from 'antd';
+import { getAuthorized } from '../utils/sessionHelper';
 
 export default {
   namespace: 'users',
@@ -27,7 +28,7 @@ export default {
         message.info('创建成功');
         yield yield put({ type: 'fetchAll' });
       } else {
-        message.error(response.message||'创建失败');
+        message.error(response.message || '创建失败');
       }
     },
 
@@ -94,7 +95,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/users') {
+        if (pathname === '/users' && getAuthorized()) {
           dispatch({ type: 'units/fetchAll' });
           dispatch({ type: 'departments/fetchAll' });
           dispatch({ type: 'teams/fetchAll' });

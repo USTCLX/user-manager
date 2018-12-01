@@ -2,13 +2,47 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:34:36 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-13 11:32:26
+ * @Last Modified time: 2018-12-02 01:17:59
  */
- .logo {
-  width: 50px;
-  height: 50px;
-  background: rgba(255,255,255,.2) url('../assets/logo.jpg');  
-  background-size: 50px 50px;
-  margin: 5px 0px 5px 0;
-  float: left;
+
+.header {
+  height: 60px;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  .logo {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, .2) url('../assets/logo.jpg');
+    background-size: 50px 50px;
+    margin: 5px 0px 5px 0;
+    float: left;
+  }
+  .info {
+    float: right;
+    height: 100%;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.sider {
+  background: #fff;
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0px;
+  top: 60px;
+}
+
+.layout {
+  margin-left: 200px;
+  margin-top: 60px;
+}
+
+.content {
+  padding: 20px 50px;
+  overflow: auto;
 }

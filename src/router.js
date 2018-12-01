@@ -1,6 +1,5 @@
-import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
-import { connect } from 'dva';
+import React, { Component } from 'react';
+import { Router, Route, Switch, Redirect } from 'dva/router';
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
@@ -12,7 +11,29 @@ import Departments from './components/Departments/Departments'
 import Teams from './components/Teams/Teams';
 import Groups from './components/Gourps/Groups';
 import ServiceType from './components/ServiceType/ServiceType';
-import NotAuthorized from './components/NotAuthorized';
+import { getAuthorized } from './utils/sessionHelper';
+
+
+function PrivateRoute({ component: Component, ...rest }) {
+  const isAuthorized = getAuthorized();
+  console.log('haha', isAuthorized);
+  return (
+    <Route
+      {...rest}
+      render={props => isAuthorized ? (
+        <Component {...rest} />
+      ) : (
+          <Redirect
+            to={{
+              pathname: '/',
+              state: { from: props.location }
+            }}
+          />
+        )}
+    />
+  )
+}
+
 
 
 function RouterConfig({ history }) {
@@ -23,13 +44,12 @@ function RouterConfig({ history }) {
 
           <Switch>
             <Route path="/" exact component={HomePage} />
-            <Route path="/users" component={Users} />
-            <Route path="/units" component={Units}></Route>
-            <Route path="/departments" component={Departments}></Route>
-            <Route path='/teams' component={Teams}></Route>
-            <Route path="/groups" component={Groups}></Route>
-            <Route path="/serviceType" component={ServiceType}></Route>
-            <Route path="/not-authorized" component={NotAuthorized}></Route>
+            <PrivateRoute path="/users" component={Users} />
+            <Route path="/units" component={Units} />
+            <Route path="/departments" component={Departments} />
+            <Route path='/teams' component={Teams} />
+            <Route path="/groups" component={Groups} />
+            <Route path="/serviceType" component={ServiceType} />
           </Switch>
 
         </BasicLayout>

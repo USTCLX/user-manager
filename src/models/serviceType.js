@@ -2,11 +2,12 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 21:10:54 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-09-17 22:29:38
+ * @Last Modified time: 2018-12-01 23:09:54
  */
 
 import { create, fetchAll, update, remove } from '../services/serviceType';
 import { message } from 'antd';
+import { getAuthorized } from '../utils/sessionHelper'
 
 export default {
   namespace: 'serviceType',
@@ -79,7 +80,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/serviceType') {
+        if (pathname === '/serviceType' && getAuthorized()) {
           dispatch({ type: 'fetchAll', payload: query || {} });
         }
       });

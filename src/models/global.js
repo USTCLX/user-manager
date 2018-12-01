@@ -2,46 +2,54 @@
  * @Author: lixiang 
  * @Date: 2018-11-29 23:44:39 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-01 00:03:14
+ * @Last Modified time: 2018-12-02 01:01:49
  */
 
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
-import { fetchCurrent } from '../services/global';
+import { login, logout } from '../services/global';
+import { clearAuthorized, setAuthorized, getAuthorized } from '../utils/sessionHelper';
 
 export default {
   namespace: 'global',
 
   state: {
     currentUser: {},
-    isAuthorized: false,
   },
 
   effects: {
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(fetchCurrent);
-      if (response && response.status === 'ok') {
-        const user = response.data;
-        yield put({
-          type: 'save',
-          payload: {
-            currentUser: response.data,
-            isAuthorized: user.level === "admin",
-          }
-        })
-      } else {
-        message.error('获取数据失败');
-
+    *redirect({ payload }, { put }) {
+      yield put(routerRedux.push('/'));
+      if (payload.message) {
+        message.error(payload.message);
       }
     },
-    *redirect({ payload }, { put, select }) {
-      const { to } = payload;
-      const isAuthorized = yield select(({ global }) => global.isAuthorized);
-      console.log('haha', isAuthorized);
-      if (!isAuthorized) {
-        yield put(routerRedux.push(to));
+    *login({ payload }, { call, put }) {
+      const response = yield call(login, payload);
+      if (response && response.status === 'ok') {
+        if (payload.next) {
+          payload.next();
+        }
+        setAuthorized(response.data.isAuthorized);
+        yield put({
+          type: 'save',
+          payload: response.data,
+        })
+      } else {
+        message.error(response.message || "登录出错");
       }
-    }
+    },
+    *logout(_, { call, put }) {
+      yield call(logout);
+      yield put({
+        type: 'save',
+        payload: {
+          currentUser: {},
+        }
+      })
+      clearAuthorized();
+      yield put(routerRedux.push('/'));
+    },
   },
 
   reducers: {
@@ -55,21 +63,16 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      dispatch({
-        type: 'fetchCurrent',
-      });
-
       return history.listen(({ pathname }) => {
-
-        if (pathname !== '/not-authorized' && pathname !== '/login') {
-          dispatch({
-            type: 'redirect',
-            payload: {
-              to: 'not-authorized',
-            }
-          })
-        } else {
-
+        if (pathname !== '/') {
+          if (!getAuthorized()) {
+            dispatch({
+              type: 'redirect',
+              payload: {
+                message: '请登录',
+              }
+            })
+          }
         }
       })
     },
