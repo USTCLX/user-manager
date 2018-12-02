@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:08:50 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-02 01:17:36
+ * @Last Modified time: 2018-12-02 12:42:55
  */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'dva/router';
@@ -65,6 +65,7 @@ class BasicLayout extends Component {
     const isAuthorized = getAuthorized();
     const { showLoginModal } = this.state;
     const { location: { pathname }, currentUser } = this.props;
+
     return (
       <Layout>
         <Header className={style.header}>
@@ -105,7 +106,7 @@ class BasicLayout extends Component {
             </Menu>
           </Sider>
           <Layout className={style.layout}>
-            <Content className={style.content} style={{ height: 'calc(100vh - 60px)' }}>
+            <Content className={style.content} >
               {this.props.children}
             </Content>
           </Layout>
