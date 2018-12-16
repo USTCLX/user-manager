@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:13:30 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-11-25 18:04:51
+ * @Last Modified time: 2018-12-16 20:10:46
  */
 
 import { connect } from 'dva';
@@ -26,6 +26,11 @@ function ServiceType({ serviceType, loading, dispatch }) {
       title: '套餐名称',
       dataIndex: 'name',
       key: 'name',
+    },
+    {
+      title: '销售价格',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '最低限价',

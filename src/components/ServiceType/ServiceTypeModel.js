@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:55:25 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-11-25 18:11:21
+ * @Last Modified time: 2018-12-16 20:07:10
  */
 import { Component } from 'react';
 import { Modal, Form, Input, InputNumber } from 'antd';
@@ -51,7 +51,7 @@ class ServiceTypeModal extends Component {
   render() {
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name, limitPrice } = this.props.record;
+    const { name, price, limitPrice } = this.props.record;
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 }
@@ -74,6 +74,18 @@ class ServiceTypeModal extends Component {
               {
                 getFieldDecorator('name',
                   { initialValue: name, rules: [{ required: 'true', message: '套餐名称' }] })(<Input />)
+              }
+            </FormItem>
+
+            <FormItem {...formItemLayout} label="销售价格">
+              {
+                getFieldDecorator('price',
+                  { initialValue: price, rules: [{ required: 'true', message: '销售价格' }] }
+                )(
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    min={limitPrice || 0} />
+                )
               }
             </FormItem>
 
