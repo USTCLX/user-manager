@@ -2,14 +2,14 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 17:14:05
+ * @Last Modified time: 2018-12-16 22:27:35
  */
 
 import { connect } from 'dva';
 import { Table, Popconfirm, Button } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
-import { levelNameMap } from '../../constants';
+import { levelNameMap, statusNameMap } from '../../constants';
 
 function Users({ units, departments, teams, groups, users, loading, dispatch }) {
 
@@ -59,6 +59,11 @@ function Users({ units, departments, teams, groups, users, loading, dispatch }) 
       title: '职位',
       dataIndex: 'levelName',
       key: 'levelName'
+    }, {
+      title: '账号状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: status => statusNameMap[status],
     }, {
       title: '从属中心',
       dataIndex: 'parent[0].name',

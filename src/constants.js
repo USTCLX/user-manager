@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:11:13 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 22:27:22
+ * @Last Modified time: 2018-12-16 22:26:43
  */
 
 
@@ -26,5 +26,10 @@ export const organizationType = {
   team: 'team',
   group: 'group',
 };
+
+export const statusNameMap = {
+  normal: '正常',
+  frozen: '停用',
+}
 
 export const PAGE_SIZE = 10;

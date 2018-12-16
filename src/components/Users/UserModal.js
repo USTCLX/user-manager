@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import { Modal, Form, Input, Select, Cascader, Checkbox, message } from 'antd';
+import { Modal, Form, Input, Select, Cascader, Checkbox, Radio, message } from 'antd';
 import { levelMap } from '../../constants';
 
 const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 
 class UserEditModal extends Component {
@@ -247,7 +248,7 @@ class UserEditModal extends Component {
   render() {
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { username, password, name, idCard, phone, email, level } = this.props.record;
+    const { username, password, name, idCard, phone, email, level, status } = this.props.record;
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 }
@@ -364,6 +365,17 @@ class UserEditModal extends Component {
               }
             </FormItem>
 
+            <FormItem {...formItemLayout} label="账号状态">
+              {
+                getFieldDecorator('status',
+                  { initialValue: status || 'normal', rules: [{ required: true, message: '请选择账号状态' }] })(
+                    <RadioGroup>
+                      <Radio value='normal'>正常</Radio>
+                      <Radio value='frozen'>停用</Radio>
+                    </RadioGroup>
+                  )
+              }
+            </FormItem>
           </Form>
 
         </Modal>
