@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:08:50 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-02 12:42:55
+ * @Last Modified time: 2019-01-06 21:52:48
  */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'dva/router';
@@ -102,7 +102,9 @@ class BasicLayout extends Component {
 
               <SubMenu key="serviceType" title={<span><Icon type="bars" theme="outlined" />数据管理</span>}>
                 <Menu.Item key="serviceType"><Link to="/serviceType">套餐管理</Link></Menu.Item>
+                <Menu.Item key="customers"><Link to="/customers">客户管理</Link></Menu.Item>
               </SubMenu>
+
             </Menu>
           </Sider>
           <Layout className={style.layout}>

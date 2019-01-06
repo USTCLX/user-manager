@@ -11,12 +11,12 @@ import Departments from './components/Departments/Departments'
 import Teams from './components/Teams/Teams';
 import Groups from './components/Gourps/Groups';
 import ServiceType from './components/ServiceType/ServiceType';
+import Customers from './components/Customers';
 import { getAuthorized } from './utils/sessionHelper';
 
 
 function PrivateRoute({ component: Component, ...rest }) {
   const isAuthorized = getAuthorized();
-  console.log('haha', isAuthorized);
   return (
     <Route
       {...rest}
@@ -50,6 +50,7 @@ function RouterConfig({ history }) {
             <Route path='/teams' component={Teams} />
             <Route path="/groups" component={Groups} />
             <Route path="/serviceType" component={ServiceType} />
+            <Route path="/customers" component={Customers} />
           </Switch>
 
         </BasicLayout>
