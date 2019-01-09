@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2019-01-06 22:11:01 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-06 22:53:15
+ * @Last Modified time: 2019-01-09 08:44:32
  */
 
 import { fetch } from '../services/customers';
@@ -13,6 +13,7 @@ import { getAuthorized } from '../utils/sessionHelper';
 export default {
   namespace: 'customers',
   state: {
+    aliWangWang: '',
     list: [],
     pagination: {
       total: 0,
@@ -23,9 +24,10 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put, select }) {
-      const curPagination = yield select(({ customers }) => customers.pagination);
+      const customers = yield select(({ customers }) => customers);
+      const { pagination: curPagination, aliWangWang } = customers;
       const { current, pageSize } = curPagination;
-      payload = Object.assign({ currentPage: current, pageSize }, payload);
+      payload = Object.assign({ currentPage: current, pageSize, aliWangWang }, payload);
       const response = yield call(fetch, payload);
       if (response.status === 'ok') {
         yield put({
