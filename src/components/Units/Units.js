@@ -2,18 +2,17 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 15:58:21
+ * @Last Modified time: 2019-01-12 20:48:18
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import UnitModal from './UnitModal';
 import style from './Units.less';
 
 function Units({ units, loading, dispatch }) {
 
-  // const { list, pagination: { total, current, pageSize } } = units;
   const { list } = units;
 
 
@@ -25,15 +24,6 @@ function Units({ units, loading, dispatch }) {
       }
     })
   }
-
-  // function pageChangeHandler(page) {
-  //   dispatch({
-  //     type: 'units/fetch',
-  //     payload: {
-  //       currentPage: page,
-  //     }
-  //   })
-  // }
 
   function editHandler(_id, values) {
     dispatch({
@@ -82,7 +72,7 @@ function Units({ units, loading, dispatch }) {
   ]
 
   return (
-    <div className={style.normal}>
+    <Card>
       <div className={style.create}>
         <UnitModal record={{}} onOk={createHandler}>
           <Button type="primary">创建中心</Button>
@@ -95,16 +85,7 @@ function Units({ units, loading, dispatch }) {
         pagination={false}
         loading={loading}
       />
-      {/* <Pagination
-        className="ant-table-pagination"
-        total={total}
-        current={current}
-        pageSize={pageSize}
-        showTotal={(total, range) => `共条数: ${total}`}
-        onChange={pageChangeHandler}
-      /> */}
-
-    </div>
+    </Card>
   )
 }
 

@@ -2,12 +2,12 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 16:01:06
+ * @Last Modified time: 2019-01-12 20:43:11
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import DepartmentModal from './DepartmentModal';
 import style from './Departments.less';
 
@@ -86,30 +86,20 @@ function Departments({ units, departments, loading, dispatch }) {
   ]
 
   return (
-    <div className={style.normal}>
-      <div>
-        <div className={style.create}>
-          <DepartmentModal record={{}} onOk={createHandler} unitsList={unitsList} >
-            <Button type="primary">创建部门</Button>
-          </DepartmentModal>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={list}
-          rowKey={record => record._id}
-          pagination={false}
-          loading={loading}
-        />
-        {/* <Pagination
-          className="ant-table-pagination"
-          total={total}
-          current={current}
-          pageSize={pageSize}
-          showTotal={(total, range) => `共条数: ${total}`}
-          onChange={pageChangeHandler}
-        /> */}
+    <Card>
+      <div className={style.create}>
+        <DepartmentModal record={{}} onOk={createHandler} unitsList={unitsList} >
+          <Button type="primary">创建部门</Button>
+        </DepartmentModal>
       </div>
-    </div>
+      <Table
+        columns={columns}
+        dataSource={list}
+        rowKey={record => record._id}
+        pagination={false}
+        loading={loading}
+      />
+    </Card>
   )
 }
 

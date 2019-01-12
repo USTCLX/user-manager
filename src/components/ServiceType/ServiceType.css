@@ -2,10 +2,10 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 20:58:35 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-05-13 16:31:50
+ * @Last Modified time: 2019-01-12 20:46:32
  */
 
- .normal {
+.normal {
   margin: 0 .5em;
 }
 
@@ -14,5 +14,5 @@
 }
 
 .create {
-  margin: 1.5em 0;
+  margin-bottom: 1.5em;
 }

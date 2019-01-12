@@ -2,18 +2,17 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 16:02:25
+ * @Last Modified time: 2019-01-12 20:47:24
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import DepartmentModal from './TeamModal';
 import style from './Teams.less';
 
 function Teams({ units, departments, teams, loading, dispatch }) {
 
-  // const { list, pagination: { current, total, pageSize } } = teams;
   const { list } = teams;
   const { list: unitsList } = units;
   const { list: departmentsList } = departments;
@@ -26,15 +25,6 @@ function Teams({ units, departments, teams, loading, dispatch }) {
       }
     })
   }
-
-  // function pageChangeHandler(page) {
-  //   dispatch({
-  //     type: 'teams/fetch',
-  //     payload: {
-  //       currentPage: page
-  //     }
-  //   })
-  // }
 
   function editHandler(_id, values) {
     dispatch({
@@ -92,7 +82,7 @@ function Teams({ units, departments, teams, loading, dispatch }) {
   ]
 
   return (
-    <div className={style.normal}>
+    <Card>
       <div className={style.create}>
         <DepartmentModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} >
           <Button type="primary">创建战队</Button>
@@ -105,15 +95,7 @@ function Teams({ units, departments, teams, loading, dispatch }) {
         pagination={false}
         loading={loading}
       />
-      {/* <Pagination
-        className="ant-table-pagination"
-        total={total}
-        current={current}
-        pageSize={pageSize}
-        showTotal={(total, range) => `共条数: ${total}`}
-        onChange={pageChangeHandler}
-      /> */}
-    </div>
+    </Card>
   )
 }
 

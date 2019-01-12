@@ -2,11 +2,11 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-16 22:27:35
+ * @Last Modified time: 2019-01-12 20:49:13
  */
 
 import { connect } from 'dva';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import UserModal from './UserModal';
 import style from './Users.less';
 import { levelNameMap, statusNameMap } from '../../constants';
@@ -104,7 +104,7 @@ function Users({ units, departments, teams, groups, users, loading, dispatch }) 
   ]
 
   return (
-    <div className={style.normal}>
+    <Card>
       <div>
         <div className={style.create}>
           <UserModal record={{}} onOk={createHandler}
@@ -124,7 +124,7 @@ function Users({ units, departments, teams, groups, users, loading, dispatch }) 
           loading={loading}
         />
       </div>
-    </div>
+    </Card>
   )
 }
 

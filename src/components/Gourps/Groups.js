@@ -2,12 +2,12 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-07-29 16:57:26
+ * @Last Modified time: 2019-01-12 20:45:26
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import GroupModal from './GroupModal';
 import style from './Groups.less';
 
@@ -97,7 +97,7 @@ function Groups({ units, departments, teams, groups, loading, dispatch }) {
   ]
 
   return (
-    <div className={style.normal}>
+    <Card>
       <div className={style.create}>
         <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList}>
           <Button type="primary">创建小组</Button>
@@ -110,15 +110,8 @@ function Groups({ units, departments, teams, groups, loading, dispatch }) {
         pagination={false}
         loading={loading}
       />
-      {/* <Pagination
-        className="ant-table-pagination"
-        total={total}
-        current={current}
-        pageSize={pageSize}
-        showTotal={(total, range) => `共条数: ${total}`}
-        onChange={pageChangeHandler}
-      /> */}
-    </div>
+    </Card>
+
   )
 }
 

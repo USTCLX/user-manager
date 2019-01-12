@@ -2,12 +2,12 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:13:30 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-16 20:10:46
+ * @Last Modified time: 2019-01-12 20:46:15
  */
 
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button, Card } from 'antd';
 import ServiceTypeModal from './ServiceTypeModel';
 import style from './ServiceType.css';
 
@@ -90,13 +90,12 @@ function ServiceType({ serviceType, loading, dispatch }) {
 
 
   return (
-    <div className={style.normal}>
+    <Card>
       <div className={style.create}>
         <ServiceTypeModal record={{}} onOk={createHandler}>
           <Button type="primary">创建套餐</Button>
         </ServiceTypeModal>
       </div>
-
       <Table
         columns={columns}
         dataSource={list}
@@ -104,7 +103,7 @@ function ServiceType({ serviceType, loading, dispatch }) {
         pagination={false}
         loading={loading}
       />
-    </div>
+    </Card>
   )
 }
 
