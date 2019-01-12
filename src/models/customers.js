@@ -2,10 +2,10 @@
  * @Author: lixiang 
  * @Date: 2019-01-06 22:11:01 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-09 08:44:32
+ * @Last Modified time: 2019-01-12 22:59:09
  */
 
-import { fetch } from '../services/customers';
+import { fetch, update } from '../services/customers';
 import { message } from 'antd';
 import { getAuthorized } from '../utils/sessionHelper';
 
@@ -37,6 +37,20 @@ export default {
       } else if (response.status === 'error') {
         message.error(response.message || '获取数据出错');
       }
+    },
+    *update({ payload }, { call, put }) {
+      const response = yield call(update, payload);
+      if (response && response.status === 'ok') {
+        message.info('更新成功');
+        yield put({
+          type: 'saveOne',
+          payload: {
+            customer: response.data,
+          },
+        });
+      } else if (response.status === 'error') {
+        message.error(response.message || '更新出错');
+      }
     }
   },
 
@@ -45,6 +59,18 @@ export default {
       return {
         ...state,
         ...payload,
+      }
+    },
+    saveOne(state, { payload: { customer } }) {
+      return {
+        ...state,
+        list: state.list.map(item => {
+          if (customer && (customer._id === item._id)) {
+            return customer;
+          } else {
+            return item;
+          }
+        })
       }
     }
   },

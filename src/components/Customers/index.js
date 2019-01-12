@@ -2,12 +2,13 @@
  * @Author: lixiang 
  * @Date: 2019-01-06 21:56:46 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-09 08:52:34
+ * @Last Modified time: 2019-01-12 22:59:43
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Table, Badge, Card, Input, Form, Row, Col, Button } from 'antd';
+import CustomerDetail from './CustomerDetail';
 
 const statusMap = [
   'warning',
@@ -39,9 +40,35 @@ const getValue = obj =>
 @Form.create()
 @connect(({ customers, loading }) => ({
   customers,
-  loading: loading.effects['customers/fetch'],
+  loading: loading.effects['customers/fetch'] || loading.effects['customers/update'],
 }))
 export default class Customers extends PureComponent {
+
+  state = {
+    modalVisible: false,
+    curCustomer: null,
+  }
+
+  // 处理详细模态框
+  handleModalVisible = (flag, curCustomer = null) => {
+    this.setState({
+      modalVisible: !!flag,
+      curCustomer,
+    })
+  }
+
+  // 更新数据
+  onOk = (values) => {
+    const { dispatch } = this.props;
+    const { curCustomer } = this.state;
+    dispatch({
+      type: 'customers/update',
+      payload: {
+        ...values,
+        _id: curCustomer._id,
+      },
+    })
+  }
 
 
   // 搜索
@@ -125,6 +152,7 @@ export default class Customers extends PureComponent {
 
   render() {
     const { customers: { list, pagination, aliWangWang }, loading, form: { getFieldDecorator } } = this.props;
+    const { modalVisible, curCustomer } = this.state;
     // 表格配置
     const columns = [
       {
@@ -159,7 +187,7 @@ export default class Customers extends PureComponent {
       {
         title: '更多操作',
         render: record => {
-          return (<a>详细</a>);
+          return <a onClick={this.handleModalVisible.bind(this, true, record)}>详细</a>;
         },
       },
     ];
@@ -194,6 +222,11 @@ export default class Customers extends PureComponent {
           loading={loading}
           onChange={this.handleStandardTableChange}
         />
+        <CustomerDetail
+          modalVisible={modalVisible}
+          handleModalVisible={this.handleModalVisible}
+          onOk={this.onOk}
+          curCustomer={curCustomer} />
       </Card>
     )
   }

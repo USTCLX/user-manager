@@ -1,0 +1,25 @@
+.dynamicDeleteButton {
+  cursor: pointer;
+  position: relative; // float: right;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all 0.3s;
+  &:hover {
+    color: #777;
+  }
+}
+
+.dynamicDeleteButton[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.modalBody {
+  max-width: 70vh;
+  overflow: auto;
+}
+
+.infoTitle {
+  margin-bottom: 16px;
+}
