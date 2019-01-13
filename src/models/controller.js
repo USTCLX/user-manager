@@ -2,9 +2,9 @@
  * @Author: lixiang 
  * @Date: 2019-01-13 21:42:55 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-13 22:44:04
+ * @Last Modified time: 2019-01-13 23:09:03
  */
-import { fetchStop, toggleStop } from '../services/controller';
+import { fetchStop, toggleStop, deleteStop } from '../services/controller';
 import { message } from 'antd';
 import { getAuthorized } from '../utils/sessionHelper';
 
@@ -35,6 +35,16 @@ export default {
         })
       } else {
         message.error('获取数据出错');
+      }
+    },
+    *deleteStop({ payload }, { call, put }) {
+      const response = yield call(deleteStop, payload);
+      if (response && response.status === 'ok') {
+        yield put({
+          type: 'fetchStop',
+        })
+      } else {
+        message.error('删除数据出错');
       }
     }
   },

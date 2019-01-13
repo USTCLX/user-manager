@@ -2,13 +2,13 @@
  * @Author: lixiang 
  * @Date: 2019-01-13 21:18:14 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-13 22:58:25
+ * @Last Modified time: 2019-01-13 23:02:21
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import { Card, Form, Switch, Table } from 'antd';
+import { Card, Form, Switch, Table, Popconfirm } from 'antd';
 import styles from './index.less';
 
 moment.locale('zh-cn');
@@ -35,6 +35,16 @@ export default class ControllerStop extends PureComponent {
     })
   }
 
+  handleDelete = (_id) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'controller/deleteStop',
+      payload: {
+        _id,
+      }
+    })
+  }
+
   render() {
     const { form: { getFieldDecorator }, fetchLoading, toggLoading, stopList } = this.props;
     const columns = [{
@@ -52,6 +62,13 @@ export default class ControllerStop extends PureComponent {
       dataIndex: 'status',
       key: 'status',
       render: (val) => STATUS_MAP[val],
+    }, {
+      title: '操作',
+      key: 'opertaion',
+      render: (text, record) =>
+        <Popconfirm title="确定删除？" onConfirm={this.handleDelete.bind(this, record._id)}>
+          <a href="">删除</a>
+        </Popconfirm>,
     }]
 
     return <Card bordered={false} >
