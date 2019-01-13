@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:47:24
+ * @Last Modified time: 2019-01-13 21:23:19
  */
 
 import { connect } from 'dva';
@@ -82,7 +82,7 @@ function Teams({ units, departments, teams, loading, dispatch }) {
   ]
 
   return (
-    <Card>
+    <Card bordered={false}>
       <div className={style.create}>
         <DepartmentModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} >
           <Button type="primary">创建战队</Button>

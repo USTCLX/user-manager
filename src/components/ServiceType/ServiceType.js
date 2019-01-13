@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-09-17 20:13:30 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:46:15
+ * @Last Modified time: 2019-01-13 21:23:14
  */
 
 import { connect } from 'dva';
@@ -90,7 +90,7 @@ function ServiceType({ serviceType, loading, dispatch }) {
 
 
   return (
-    <Card>
+    <Card bordered={false}>
       <div className={style.create}>
         <ServiceTypeModal record={{}} onOk={createHandler}>
           <Button type="primary">创建套餐</Button>

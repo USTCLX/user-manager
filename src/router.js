@@ -12,6 +12,7 @@ import Teams from './components/Teams/Teams';
 import Groups from './components/Gourps/Groups';
 import ServiceType from './components/ServiceType/ServiceType';
 import Customers from './components/Customers';
+import ControllerStop from './components/ControllerStop';
 import { getAuthorized } from './utils/sessionHelper';
 
 
@@ -43,14 +44,15 @@ function RouterConfig({ history }) {
         <BasicLayout>
 
           <Switch>
-            <Route path="/" exact component={HomePage} />
-            <PrivateRoute path="/users" component={Users} />
-            <Route path="/units" component={Units} />
-            <Route path="/departments" component={Departments} />
+            <Route path='/' exact component={HomePage} />
+            <PrivateRoute path='/users' component={Users} />
+            <Route path='/units' component={Units} />
+            <Route path='/departments' component={Departments} />
             <Route path='/teams' component={Teams} />
-            <Route path="/groups" component={Groups} />
-            <Route path="/serviceType" component={ServiceType} />
-            <Route path="/customers" component={Customers} />
+            <Route path='/groups' component={Groups} />
+            <Route path='/serviceType' component={ServiceType} />
+            <Route path='/customers' component={Customers} />
+            <Route path='/stop' component={ControllerStop} />
           </Switch>
 
         </BasicLayout>

@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:49:13
+ * @Last Modified time: 2019-01-13 21:25:35
  */
 
 import { connect } from 'dva';
@@ -104,26 +104,25 @@ function Users({ units, departments, teams, groups, users, loading, dispatch }) 
   ]
 
   return (
-    <Card>
-      <div>
-        <div className={style.create}>
-          <UserModal record={{}} onOk={createHandler}
-            unitsList={unitsList}
-            departmentsList={departmentsList}
-            teamsList={teamsList}
-            groupsList={groupsList}
-          >
-            <Button type="primary">创建账户</Button>
-          </UserModal>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={list}
-          rowKey={record => record._id}
-          pagination={false}
-          loading={loading}
-        />
+    <Card bordered={false}>
+      <div className={style.create}>
+        <UserModal record={{}} onOk={createHandler}
+          unitsList={unitsList}
+          departmentsList={departmentsList}
+          teamsList={teamsList}
+          groupsList={groupsList}
+        >
+          <Button type="primary">创建账户</Button>
+        </UserModal>
       </div>
+
+      <Table
+        columns={columns}
+        dataSource={list}
+        rowKey={record => record._id}
+        pagination={false}
+        loading={loading}
+      />
     </Card>
   )
 }

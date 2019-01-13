@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2019-01-06 21:56:46 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 22:59:43
+ * @Last Modified time: 2019-01-13 21:22:45
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
@@ -193,7 +193,7 @@ export default class Customers extends PureComponent {
     ];
 
     return (
-      <Card>
+      <Card bordered={false}>
         <Form onSubmit={this.handleSearch} layout="inline" style={{ marginBottom: '16px' }}>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={8} sm={24}>

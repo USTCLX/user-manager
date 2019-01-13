@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:48:18
+ * @Last Modified time: 2019-01-13 21:23:27
  */
 
 import { connect } from 'dva';
@@ -72,7 +72,7 @@ function Units({ units, loading, dispatch }) {
   ]
 
   return (
-    <Card>
+    <Card bordered={false}>
       <div className={style.create}>
         <UnitModal record={{}} onOk={createHandler}>
           <Button type="primary">创建中心</Button>

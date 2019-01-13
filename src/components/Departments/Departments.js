@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:43:11
+ * @Last Modified time: 2019-01-13 22:54:43
  */
 
 import { connect } from 'dva';
@@ -86,7 +86,7 @@ function Departments({ units, departments, loading, dispatch }) {
   ]
 
   return (
-    <Card>
+    <Card bordered={false}>
       <div className={style.create}>
         <DepartmentModal record={{}} onOk={createHandler} unitsList={unitsList} >
           <Button type="primary">创建部门</Button>

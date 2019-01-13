@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 21:05:57 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-12 20:45:26
+ * @Last Modified time: 2019-01-13 21:23:00
  */
 
 import { connect } from 'dva';
@@ -97,7 +97,7 @@ function Groups({ units, departments, teams, groups, loading, dispatch }) {
   ]
 
   return (
-    <Card>
+    <Card bordered={false}>
       <div className={style.create}>
         <GroupModal record={{}} onOk={createHandler} unitsList={unitsList} departmentsList={departmentsList} teamsList={teamsList}>
           <Button type="primary">创建小组</Button>
