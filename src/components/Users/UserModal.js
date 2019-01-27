@@ -372,6 +372,7 @@ class UserEditModal extends Component {
                     <RadioGroup>
                       <Radio value='normal'>正常</Radio>
                       <Radio value='frozen'>停用</Radio>
+                      <Radio value='register' disabled>注册中</Radio>
                     </RadioGroup>
                   )
               }
