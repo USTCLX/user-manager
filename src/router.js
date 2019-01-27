@@ -14,6 +14,7 @@ import ServiceType from './components/ServiceType/ServiceType';
 import Customers from './components/Customers';
 import ControllerStop from './components/ControllerStop';
 import AuditAccount from './components/AuditAccount';
+import Dashboard from './components/Dashboard';
 import { getAuthorized } from './utils/sessionHelper';
 
 
@@ -55,6 +56,7 @@ function RouterConfig({ history }) {
             <Route path='/customers' component={Customers} />
             <Route path='/stop' component={ControllerStop} />
             <Route path='/audit' component={AuditAccount}></Route>
+            <Route path='/dashboard' component={Dashboard}></Route>
           </Switch>
 
         </BasicLayout>

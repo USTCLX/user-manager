@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-11 23:08:50 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-27 16:45:32
+ * @Last Modified time: 2019-01-27 22:07:08
  */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'dva/router';
@@ -91,8 +91,9 @@ class BasicLayout extends Component {
               </Menu.Item>
 
               <SubMenu key='/control' title={<span><Icon type='dashboard' />控制台</span>}>
+                <Menu.Item key='/dashboard'><Link to='/dashboard'>快捷操作</Link></Menu.Item>
                 <Menu.Item key='/stop'><Link to='/stop'>暂停计时</Link></Menu.Item>
-                <Menu.Item key='/audit'><Link to='/audit'>账户申请</Link></Menu.Item>
+                <Menu.Item key='/audit'><Link to='/audit'>账户审批</Link></Menu.Item>
               </SubMenu>
 
               <SubMenu key='/origization' title={<span><Icon type='team' />组织管理</span>}>
