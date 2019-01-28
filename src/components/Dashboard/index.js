@@ -2,7 +2,7 @@
  * @Author: lixiang
  * @Date: 2019-01-27 21:48:35
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-27 22:49:50
+ * @Last Modified time: 2019-01-28 23:44:33
  */
 
 
@@ -25,7 +25,7 @@ export default class Dashboard extends PureComponent {
   render() {
     const uploadProps = {
       action: '/api/files/upload/csv',
-      // accept: '.csv',
+      accept: '.csv',
       onChange: this.onUploadChange,
       showUploadList: false,
     }
