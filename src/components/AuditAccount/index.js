@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2019-01-27 16:40:06 
  * @Last Modified by: lixiang
- * @Last Modified time: 2019-01-27 17:53:30
+ * @Last Modified time: 2019-03-10 15:05:32
  */
 
 import React, { PureComponent } from 'react';
@@ -44,7 +44,10 @@ export default class AuditAccount extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'users/update',
-      payload: { _id, ...values }
+      payload: { _id, ...values },
+      nextPayload: {
+        status: 'register',
+      }
     })
   }
 
@@ -79,10 +82,10 @@ export default class AuditAccount extends PureComponent {
     }, {
       title: '操作',
       key: 'operation',
-      render: (record, index) => {
+      render: (record) => {
         return <UserModal
           record={record}
-          onOk={this.editHandler.bind(null, record._id)}
+          onOk={this.editHandler.bind(this, record._id)}
           unitsList={unitsList}
           departmentsList={departmentsList}
           teamsList={teamsList}
@@ -99,7 +102,7 @@ export default class AuditAccount extends PureComponent {
         columns={columns}
         dataSource={list}
         pagination={false}
-        key={(record => record._id)} />
+        rowKey={(record => record._id)} />
     </div>
   }
 }

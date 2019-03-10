@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-05-16 23:47:22 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-01 23:12:58
+ * @Last Modified time: 2019-03-10 15:06:32
  */
 import { fetch, fetchAll, update, create, remove } from '../services/users';
 import { message } from 'antd';
@@ -76,10 +76,10 @@ export default {
       }
     },
 
-    *update({ payload }, { call, put }) {
+    *update({ payload, nextPayload }, { call, put }) {
       const response = yield call(update, payload);
       if (response && response.status === 'ok') {
-        yield put({ type: 'fetchAll' });
+        yield put({ type: 'fetchAll', payload: nextPayload || {} });
       } else {
         //error
         message.error('更新用户新出错');

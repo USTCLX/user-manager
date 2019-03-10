@@ -2,7 +2,7 @@
  * @Author: lixiang 
  * @Date: 2018-11-29 23:44:39 
  * @Last Modified by: lixiang
- * @Last Modified time: 2018-12-02 01:01:49
+ * @Last Modified time: 2019-03-10 14:19:07
  */
 
 import { message } from 'antd';
@@ -72,6 +72,11 @@ export default {
                 message: '请登录',
               }
             })
+          } else if (pathname === '/audit') {
+            dispatch({ type: 'units/fetchAll' });
+            dispatch({ type: 'departments/fetchAll' });
+            dispatch({ type: 'teams/fetchAll' });
+            dispatch({ type: 'groups/fetchAll' });
           }
         }
       })

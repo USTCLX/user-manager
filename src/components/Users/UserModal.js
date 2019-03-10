@@ -19,7 +19,6 @@ class UserEditModal extends Component {
     };
   }
 
-
   resetOptions(level) {
     if (!level) {
       this.setState({ options: [] });
@@ -104,6 +103,7 @@ class UserEditModal extends Component {
         break;
     }
 
+
     this.setState({ options: opts });
   }
 
@@ -153,9 +153,11 @@ class UserEditModal extends Component {
     if (e)
       e.stopPropagation();
 
-    this.resetOptions(this.props.record.level);
-    this.resetParentVal();
-    this.resetAuthority(this.props.record.level);
+    this.levelChangeHandler(this.props.record.level);
+
+    // this.resetOptions(this.props.record.level);
+    // this.resetParentVal();
+    // this.resetAuthority(this.props.record.level);
 
     this.setState({
       visible: true
@@ -173,7 +175,7 @@ class UserEditModal extends Component {
     const { onOk } = this.props;
     this.props.form.validateFields((err, values) => {
       if (err) {
-        // console.log('err', err);
+        console.log('err', err);
       } else {
         const { parent, level } = values;
         let pass = true;
@@ -227,7 +229,7 @@ class UserEditModal extends Component {
           message.error('参数有误，请检查职位与从属小组');
           return;
         }
-        onOk(values);
+        onOk && onOk(values);
         this.hideModalHandler();
       }
     })
